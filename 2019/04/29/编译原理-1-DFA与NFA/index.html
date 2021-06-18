@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhuyk6.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Muse&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
+<meta name="description" content="本篇文章关于DFA、NFA相关的算法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编译原理--1.DFA与NFA">
+<meta property="og:url" content="https://zhuyk6.github.io/2019/04/29/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86-1-DFA%E4%B8%8ENFA/index.html">
+<meta property="og:site_name" content="Zhuyk6&#39;s Blog">
+<meta property="og:description" content="本篇文章关于DFA、NFA相关的算法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhuyk6.github.io/编译原理-1-DFA与NFA/pse1.jpg">
+<meta property="og:image" content="https://zhuyk6.github.io/2019/04/29/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86-1-DFA%E4%B8%8ENFA/编译原理-1-DFA与NFA/pse2.jpg">
+<meta property="og:image" content="https://zhuyk6.github.io/2019/04/29/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86-1-DFA%E4%B8%8ENFA/编译原理-1-DFA与NFA/eq-DFA.png">
+<meta property="article:published_time" content="2019-04-29T08:51:41.000Z">
+<meta property="article:modified_time" content="2021-05-30T10:17:33.338Z">
+<meta property="article:author" content="zhuyk6">
+<meta property="article:tag" content="DFA">
+<meta property="article:tag" content="NFA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhuyk6.github.io/编译原理-1-DFA与NFA/pse1.jpg">
+
+
+<link rel="canonical" href="https://zhuyk6.github.io/2019/04/29/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86-1-DFA%E4%B8%8ENFA/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhuyk6.github.io&#x2F;2019&#x2F;04&#x2F;29&#x2F;%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86-1-DFA%E4%B8%8ENFA&#x2F;&quot;,&quot;path&quot;:&quot;2019&#x2F;04&#x2F;29&#x2F;编译原理-1-DFA与NFA&#x2F;&quot;,&quot;title&quot;:&quot;编译原理--1.DFA与NFA&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>编译原理--1.DFA与NFA | Zhuyk6's Blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Zhuyk6's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#dfa%E4%B8%8Enfa"><span class="nav-number">1.</span> <span class="nav-text">DFA与NFA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dfa"><span class="nav-number">1.1.</span> <span class="nav-text">DFA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nfa"><span class="nav-number">1.2.</span> <span class="nav-text">NFA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%93%E5%B1%95dfa%E4%B8%8Enfa"><span class="nav-number">1.3.</span> <span class="nav-text">拓展DFA与NFA</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dfanfa%E5%92%8Cepsilon-nfa%E7%9A%84%E7%AD%89%E4%BB%B7%E6%80%A7%E4%B8%8E%E8%BD%AC%E6%8D%A2"><span class="nav-number">2.</span> <span class="nav-text">DFA、NFA和\(\epsilon\)-NFA的等价性与转换：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dfa%E5%88%B0nfa%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="nav-number">2.1.</span> <span class="nav-text">DFA到NFA的转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nfa%E5%88%B0dfa%E7%9A%84%E8%BD%AC%E6%8D%A2%E5%AD%90%E9%9B%86%E6%9E%84%E9%80%A0%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">NFA到DFA的转换：子集构造法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#epsilon-nfa%E8%BD%ACdfa"><span class="nav-number">2.3.</span> <span class="nav-text">\(\epsilon\)-NFA转DFA</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E7%AD%89%E4%BB%B7%E6%80%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">自动机的等价性和最小化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E7%9A%84%E7%AD%89%E4%BB%B7%E6%80%A7"><span class="nav-number">3.1.</span> <span class="nav-text">状态的等价性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E7%AD%89%E4%BB%B7%E6%80%A7"><span class="nav-number">3.2.</span> <span class="nav-text">自动机的等价性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%B0%8F%E5%8C%96dfa"><span class="nav-number">3.3.</span> <span class="nav-text">最小化DFA</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhuyk6</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zhuyk6.github.io/2019/04/29/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86-1-DFA%E4%B8%8ENFA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhuyk6">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhuyk6's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          编译原理--1.DFA与NFA
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-04-29 16:51:41" itemprop="dateCreated datePublished" datetime="2019-04-29T16:51:41+08:00">2019-04-29</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-05-30 18:17:33" itemprop="dateModified" datetime="2021-05-30T18:17:33+08:00">2021-05-30</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Computer-Science/" itemprop="url" rel="index"><span itemprop="name">Computer Science</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Computer-Science/Compiler/" itemprop="url" rel="index"><span itemprop="name">Compiler</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>本篇文章关于DFA、NFA相关的算法。</p>
+<span id="more"></span>
+<h2 id="dfa与nfa">DFA与NFA</h2>
+<h3 id="dfa">DFA</h3>
+<p>DFA的定义：</p>
+<p><span class="math display">\[A = (Q, \Sigma, \delta, q_0, F)\]</span></p>
+<p>其中 1. <span class="math inline">\(Q\)</span>表示有限的状态的集合 2. <span class="math inline">\(\Sigma\)</span>表示字符集 3. <span class="math inline">\(\delta: Q\times \Sigma \rightarrow Q\)</span>表示状态转移函数 4. <span class="math inline">\(q_0\)</span>是初始状态 5. <span class="math inline">\(F\)</span>是接受状态集合</p>
+<p>一个DFA A​接受的语言是​<span class="math inline">\(L(A) = \lbrace w: \delta(q_0, w) \in F\rbrace\)</span>。</p>
+<p>Julia Code:</p>
+<figure class="highlight julia"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> DFA</span><br><span class="line">    Q :: <span class="built_in">Set</span>&#123;<span class="built_in">Symbol</span>&#125;</span><br><span class="line">    Σ :: <span class="built_in">Set</span>&#123;<span class="built_in">Symbol</span>&#125;</span><br><span class="line">    δ :: <span class="built_in">Dict</span>&#123;<span class="built_in">Tuple</span>&#123;<span class="built_in">Symbol</span>, <span class="built_in">Symbol</span>&#125;, <span class="built_in">Symbol</span>&#125;</span><br><span class="line">    q0 :: <span class="built_in">Symbol</span></span><br><span class="line">    F :: <span class="built_in">Set</span>&#123;<span class="built_in">Symbol</span>&#125;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h3 id="nfa">NFA</h3>
+<p>NFA的定义：</p>
+<p><span class="math display">\[A = (Q, \Sigma, \delta, q_0, F)\]</span></p>
+<p>和DFA不同的地方仅仅是状态转移函数<span class="math inline">\(\delta\)</span>：</p>
+<p><span class="math display">\[\delta(p, a) = \lbrace q_1, q_2, \ldots q_k\rbrace\]</span></p>
+<p>其中<span class="math inline">\(q_1, q_2, \ldots, q_k\)</span>都是一步有效的转移。</p>
+<p>Julia Code:</p>
+<figure class="highlight julia"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> NFA</span><br><span class="line">    Q :: <span class="built_in">Set</span>&#123;<span class="built_in">Symbol</span>&#125;</span><br><span class="line">    Σ :: <span class="built_in">Set</span>&#123;<span class="built_in">Symbol</span>&#125;</span><br><span class="line">    δ :: <span class="built_in">Dict</span>&#123;<span class="built_in">Tuple</span>&#123;<span class="built_in">Symbol</span>, <span class="built_in">Symbol</span>&#125;, <span class="built_in">Set</span>&#123;<span class="built_in">Symbol</span>&#125;&#125;</span><br><span class="line">    q0 :: <span class="built_in">Symbol</span></span><br><span class="line">    F :: <span class="built_in">Set</span>&#123;<span class="built_in">Symbol</span>&#125;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h3 id="拓展dfa与nfa">拓展DFA与NFA</h3>
+<p>DFA与NFA的拓展定义：</p>
+<ol type="1">
+<li>引入<span class="math inline">\(\epsilon\)</span>转移：将<span class="math inline">\(\epsilon\)</span>加入字符集<span class="math inline">\(\Sigma\)</span></li>
+<li>引入“死状态”：不必要求<span class="math inline">\(\delta\)</span>是满的，<span class="math inline">\(\delta\)</span>可以是偏函数，所有未定义的<span class="math inline">\(\delta(p, a)\)</span>可以视作转移到“死状态”<span class="math inline">\(\emptyset\)</span>，并且<span class="math inline">\(\forall a, \delta(\emptyset, a) = \emptyset\)</span>。</li>
+</ol>
+<h2 id="dfanfa和epsilon-nfa的等价性与转换">DFA、NFA和<span class="math inline">\(\epsilon\)</span>-NFA的等价性与转换：</h2>
+<h3 id="dfa到nfa的转换">DFA到NFA的转换</h3>
+<p>DFA是特殊的NFA，不需要转化。</p>
+<h3 id="nfa到dfa的转换子集构造法">NFA到DFA的转换：子集构造法</h3>
+<p>NFA <span class="math inline">\(A = (Q_A, \Sigma_A, \delta_A, S_A, F_A)\)</span>，构造DFA <span class="math inline">\(D = (Q_D, \Sigma_D, \delta_D, S_D, F_D)\)</span>，使得<span class="math inline">\(L(D) = L(A)\)</span>。</p>
+<p>构造方法：</p>
+<ol type="1">
+<li><span class="math inline">\(Q_D = Q_A^\star = \lbrace S: S \subseteq Q_A \rbrace​\)</span></li>
+<li><span class="math inline">\(\Sigma_D = \Sigma_A\)</span></li>
+<li><span class="math inline">\(S_D = \lbrace S_A\rbrace\)</span></li>
+<li><span class="math inline">\(F_D = \lbrace S \subseteq Q_A : S\cap F_A \neq \emptyset \rbrace\)</span></li>
+<li><span class="math inline">\(\delta_D(S, a) = \bigcup_{p \in S} \delta_A(p, a)\)</span></li>
+</ol>
+<p>由于<span class="math inline">\(Q_D\)</span>是<span class="math inline">\(Q_A\)</span>的子集的集合，所及称作“子集构造法”，得到的DFA D的状态数是<span class="math inline">\(O(2^n)\)</span>，其中<span class="math inline">\(n = |Q_A|\)</span>。</p>
+<p>但是实际上很多状态是<strong>不可达</strong>的，所以没必要真的考虑<span class="math inline">\(Q_A^\star\)</span>中所有的元素，只需要从维护一个队列<span class="math inline">\(Queue\)</span>，不断生成<span class="math inline">\(\delta\)</span>转移表，将新出现的状态加入队列即可。</p>
+<p>伪代码如下：</p>
+<figure>
+<img src="/编译原理-1-DFA与NFA/pse1.jpg" alt="NFA to DFA伪代码" /><figcaption>NFA to DFA伪代码</figcaption>
+</figure>
+<h3 id="epsilon-nfa转dfa"><span class="math inline">\(\epsilon\)</span>-NFA转DFA</h3>
+<p>关键在于消除<span class="math inline">\(\epsilon​\)</span>转移，定义<span class="math inline">\(\epsilon​\)</span>闭包：</p>
+<p><span class="math display">\[\text{ECLOSE}(q) = \lbrace p: p \in \hat{\delta}(q, \epsilon) \rbrace​\]</span></p>
+<p>显然$(q) $可以使用BFS快速求得。</p>
+<p>拓展定义集合的<span class="math inline">\(\epsilon\)</span>闭包：</p>
+<p><span class="math display">\[\text{ECLOSE}(S) = \bigcup_{q\in S} \text{ECLOSE}(q)  \]</span></p>
+<p><span class="math inline">\(\epsilon\)</span>-NFA转DFA和NFA转DFA十分相似，只是需要注意构造出的子集<span class="math inline">\(S\)</span>求一次<span class="math inline">\(\epsilon\)</span>闭包才是DFA的状态。</p>
+<p>伪代码如下：</p>
+<figure>
+<img src="编译原理-1-DFA与NFA/pse2.jpg" alt="E-NFA to DFA伪代码" /><figcaption>E-NFA to DFA伪代码</figcaption>
+</figure>
+<p>Julia Code:</p>
+<figure class="highlight julia"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> NFA_to_DFA(nfa :: NFA)</span><br><span class="line">    Q = <span class="built_in">Set</span>&#123;<span class="built_in">Symbol</span>&#125;()</span><br><span class="line">    Σ = setdiff(nfa.Σ, <span class="built_in">Set</span>([:ϵ]))</span><br><span class="line">    δ = <span class="built_in">Dict</span>&#123;<span class="built_in">Tuple</span>&#123;<span class="built_in">Symbol</span>, <span class="built_in">Symbol</span>&#125;, <span class="built_in">Symbol</span>&#125;()</span><br><span class="line">    q0 = set_to_Symbol(ϵ_close(nfa, nfa.q0))</span><br><span class="line">    F = <span class="built_in">Set</span>&#123;<span class="built_in">Symbol</span>&#125;()</span><br><span class="line"></span><br><span class="line">    queue = <span class="built_in">Vector</span>&#123;<span class="built_in">Set</span>&#123;<span class="built_in">Symbol</span>&#125;&#125;()</span><br><span class="line">    push!(queue, ϵ_close(nfa, nfa.q0))</span><br><span class="line">    <span class="keyword">while</span> !isempty(queue)</span><br><span class="line">        S = popfirst!(queue)</span><br><span class="line">        p = set_to_Symbol(S)</span><br><span class="line"></span><br><span class="line">        push!(Q, p)</span><br><span class="line">        !isempty(intersect(nfa.F, S)) &amp;&amp; push!(F, p)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> a <span class="keyword">in</span> Σ</span><br><span class="line">            tmp = <span class="built_in">Set</span>&#123;<span class="built_in">Symbol</span>&#125;()</span><br><span class="line">            <span class="keyword">for</span> p <span class="keyword">in</span> S</span><br><span class="line">                haskey(nfa.δ, (p, a)) &amp;&amp; union!(tmp, nfa.δ[(p, a)])</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            T = ϵ_close(nfa, tmp)</span><br><span class="line">            q = set_to_Symbol(T)</span><br><span class="line">            δ[(p, a)] = q</span><br><span class="line">            q ∉ Q &amp;&amp; push!(queue, T)</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    DFA(Q, Σ, δ, q0, F)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h2 id="自动机的等价性和最小化">自动机的等价性和最小化</h2>
+<h3 id="状态的等价性">状态的等价性</h3>
+<p>定义：两个状态<span class="math inline">\(p, q​\)</span>是等价的</p>
+<p><span class="math display">\[p \Leftrightarrow q : \forall w \in \Sigma^\star, \hat{\delta}(p, w) \in F \Leftrightarrow \hat{\delta}(q, w) \in F​\]</span></p>
+<p>如果<span class="math inline">\(\exists w\in \Sigma^\star, \hat{\delta}(p, w) \in F, \hat{\delta}(q, w) \notin F​\)</span>，那么称<span class="math inline">\(p,q​\)</span>是可区分的。</p>
+<p>可以递归的判断两个状态是否可以区分：</p>
+<ol type="1">
+<li><span class="math inline">\(p \in F, q \notin F​\)</span>，那么<span class="math inline">\(p, q​\)</span>可区分</li>
+<li>如果<span class="math inline">\(r,s\)</span>可区分，并且<span class="math inline">\(\exists a \in \Sigma, \delta(p,a)=r, \delta(q,a)=s\)</span>，那么<span class="math inline">\(p,q\)</span>可区分</li>
+</ol>
+<p><strong>填表算法</strong>：不断的发现可区分对<span class="math inline">\((r,s)\)</span>，然后寻找新的可区分对<span class="math inline">\((p,q)\)</span>，直到表格不再增加新的可区分对。</p>
+<blockquote>
+<p>为了加速填表算法，可以提前预处理出可以进入<span class="math inline">\((r,s)\)</span>对的<span class="math inline">\((p,q)\)</span>对：</p>
+<p>枚举所有<span class="math inline">\((p,q)\)</span>对，将<span class="math inline">\((p,q)\)</span>加入<span class="math inline">\((\delta(p,a), \delta(q,a))\)</span>的列表中。</p>
+</blockquote>
+<p>可以证明，填表算法能发现所有的可区分对，换言之，剩下的都是等价状态。填表算法的复杂度是<span class="math inline">\(O(n^2)\)</span>。</p>
+<p>Julia代码如下：</p>
+<figure class="highlight julia"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> get_Equivalent(dfa :: DFA)</span><br><span class="line">    list = <span class="built_in">Dict</span>((i,j)=&gt;[] <span class="keyword">for</span> i <span class="keyword">in</span> dfa.Q, j <span class="keyword">in</span> dfa.Q)</span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> dfa.Q</span><br><span class="line">        <span class="keyword">for</span> q <span class="keyword">in</span> dfa.Q</span><br><span class="line">            <span class="keyword">for</span> a <span class="keyword">in</span> dfa.Σ</span><br><span class="line">                (r, s) = (dfa.δ[(p, a)], dfa.δ[(q, a)])</span><br><span class="line">                push!(list[(r, s)], (p, q))</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    equivalent = <span class="built_in">Dict</span>((i,j)=&gt;<span class="literal">true</span> <span class="keyword">for</span> i <span class="keyword">in</span> dfa.Q, j <span class="keyword">in</span> dfa.Q)</span><br><span class="line"></span><br><span class="line">    queue = []</span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> dfa.F</span><br><span class="line">        <span class="keyword">for</span> q <span class="keyword">in</span> dfa.Q</span><br><span class="line">            <span class="keyword">if</span> q ∉ dfa.F</span><br><span class="line">                equivalent[(p, q)] = <span class="literal">false</span></span><br><span class="line">                push!(queue, (p, q))</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">while</span> !isempty(queue)</span><br><span class="line">        (r, s) = popfirst!(queue)</span><br><span class="line">        <span class="keyword">for</span> (p, q) <span class="keyword">in</span> list[(r, s)]</span><br><span class="line">            <span class="keyword">if</span> equivalent[(p, q)]</span><br><span class="line">                equivalent[(p, q)] = <span class="literal">false</span></span><br><span class="line">                push!(queue, (p, q))</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    equivalent</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h3 id="自动机的等价性">自动机的等价性</h3>
+<p>判断两个自动机等价的简单方法是将两个自动机放在一起视作一个大的自动机（虽然有两个初始状态，但没有影响）。然后执行填表算法，判断两个初始状态是否等价（不可区分）即可。</p>
+<figure>
+<img src="编译原理-1-DFA与NFA/eq-DFA.png" alt="自动机的等价性" /><figcaption>自动机的等价性</figcaption>
+</figure>
+<h3 id="最小化dfa">最小化DFA</h3>
+<p>定理：对于任意正则语言<span class="math inline">\(L\)</span>，最小状态DFA是唯一的。</p>
+<p>最小化DFA A的算法如下：</p>
+<ol type="1">
+<li>排除所有不能从初始状态到达的状态；</li>
+<li>把剩下的状态划分为若干块，每一块内的状态都是等价的，且不同块的状态不等价，将这些块作为最小DFA的状态。</li>
+</ol>
+<p>Julia代码：</p>
+<figure class="highlight julia"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> get_Minimum_DFA(dfa :: DFA)</span><br><span class="line">    equivalent = get_Equivalent(dfa)</span><br><span class="line"></span><br><span class="line">    Q :: <span class="built_in">Set</span>&#123;<span class="built_in">Symbol</span>&#125; = <span class="built_in">Set</span>()</span><br><span class="line">    vis = <span class="built_in">Dict</span>(p=&gt;<span class="literal">false</span> <span class="keyword">for</span> p <span class="keyword">in</span> dfa.Q)</span><br><span class="line">    mapping = <span class="built_in">Dict</span>(p=&gt;<span class="built_in">Symbol</span>() <span class="keyword">for</span> p <span class="keyword">in</span> dfa.Q)</span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> dfa.Q</span><br><span class="line">        <span class="keyword">if</span> !vis[p]</span><br><span class="line">            tmp = <span class="string">&quot;&quot;</span></span><br><span class="line">            <span class="keyword">for</span> q <span class="keyword">in</span> dfa.Q</span><br><span class="line">                <span class="keyword">if</span> equivalent[(p, q)]</span><br><span class="line">                    vis[q] = <span class="literal">true</span></span><br><span class="line">                    tmp *= <span class="built_in">String</span>(q)</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            s = <span class="built_in">Symbol</span>(tmp)</span><br><span class="line">            <span class="keyword">for</span> q <span class="keyword">in</span> dfa.Q</span><br><span class="line">                <span class="keyword">if</span> equivalent[(p, q)]</span><br><span class="line">                    mapping[q] = s</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            push!(Q, s)</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    Σ = dfa.Σ</span><br><span class="line">    δ = <span class="built_in">Dict</span>((p,a)=&gt;<span class="built_in">Symbol</span>() <span class="keyword">for</span> p <span class="keyword">in</span> Q, a <span class="keyword">in</span> Σ)</span><br><span class="line">    <span class="keyword">for</span> ((p,a), q) <span class="keyword">in</span> dfa.δ</span><br><span class="line">        δ[(mapping[p], a)] = mapping[q]</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    q0 = mapping[dfa.q0]</span><br><span class="line">    F :: <span class="built_in">Set</span>&#123;<span class="built_in">Symbol</span>&#125; = <span class="built_in">Set</span>()</span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> dfa.F</span><br><span class="line">        push!(F, mapping[p])</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    DFA(Q, Σ, δ, q0, F)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/DFA/" rel="tag"># DFA</a>
+              <a href="/tags/NFA/" rel="tag"># NFA</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/1970/01/01/hello-world/" rel="prev" title="Hello World">
+                  <i class="fa fa-chevron-left"></i> Hello World
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/05/30/Test/" rel="next" title="Test">
+                  Test <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhuyk6</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{&quot;enable&quot;:true,&quot;theme&quot;:&quot;forest&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mermaid@8.9.3&#x2F;dist&#x2F;mermaid.min.js&quot;,&quot;integrity&quot;:&quot;sha256-OyJHvRcZHaRR6Ig73ppxF4QXk8HzvfgTprRWkulCkfY&#x3D;&quot;}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;,&quot;integrity&quot;:&quot;sha256-ncNI9OXOS5Ek4tzVYiOMmN&#x2F;KKCPZ6V0Cpv2P&#x2F;zHntiA&#x3D;&quot;}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
