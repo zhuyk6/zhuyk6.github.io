@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CNiconne:300,300italic,400,400italic,700,700italic%7CFira+Code:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhuyk6.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Gemini&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Monads as Containers Monads as Computation">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Monads as Containers and Computations">
+<meta property="og:url" content="https://zhuyk6.github.io/2021/06/25/Monads-as-Containers-and-Computations/index.html">
+<meta property="og:site_name" content="Zhuyk6&#39;s Blog">
+<meta property="og:description" content="Monads as Containers Monads as Computation">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-06-25T03:11:16.000Z">
+<meta property="article:modified_time" content="2021-06-25T09:29:53.068Z">
+<meta property="article:author" content="zhuyk6">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zhuyk6.github.io/2021/06/25/Monads-as-Containers-and-Computations/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhuyk6.github.io&#x2F;2021&#x2F;06&#x2F;25&#x2F;Monads-as-Containers-and-Computations&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;06&#x2F;25&#x2F;Monads-as-Containers-and-Computations&#x2F;&quot;,&quot;title&quot;:&quot;Monads as Containers and Computations&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>Monads as Containers and Computations | Zhuyk6's Blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Zhuyk6's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+        <li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#monad-as-containers"><span class="nav-number">1.</span> <span class="nav-text">Monad as Containers</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#monad-%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.</span> <span class="nav-text">Monad 定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#monad-examples"><span class="nav-number">1.2.</span> <span class="nav-text">Monad examples</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#identity-a"><span class="nav-number">1.2.1.</span> <span class="nav-text">Identity a</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#maybe-a"><span class="nav-number">1.2.2.</span> <span class="nav-text">Maybe a</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a"><span class="nav-number">1.2.3.</span> <span class="nav-text">[a]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reader-r-a"><span class="nav-number">1.2.4.</span> <span class="nav-text">Reader r a</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#state-s-a"><span class="nav-number">1.2.5.</span> <span class="nav-text">State s a</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#monads-as-computation"><span class="nav-number">2.</span> <span class="nav-text">Monads as Computation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E7%9A%84%E8%A7%86%E8%A7%92"><span class="nav-number">2.1.</span> <span class="nav-text">计算的视角</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#do-notation"><span class="nav-number">2.2.</span> <span class="nav-text">Do notation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#monad-laws"><span class="nav-number">2.3.</span> <span class="nav-text">Monad Laws</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E7%AE%B1"><span class="nav-number">2.4.</span> <span class="nav-text">工具箱</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhuyk6</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuyk6" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuyk6" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhuyk6@foxmail.com" title="E-Mail → mailto:zhuyk6@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zhuyk6.github.io/2021/06/25/Monads-as-Containers-and-Computations/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhuyk6">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhuyk6's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Monads as Containers and Computations
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-06-25 11:11:16 / 修改时间：17:29:53" itemprop="dateCreated datePublished" datetime="2021-06-25T11:11:16+08:00">2021-06-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Programming-Language/" itemprop="url" rel="index"><span itemprop="name">Programming Language</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Programming-Language/Haskell/" itemprop="url" rel="index"><span itemprop="name">Haskell</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><a target="_blank" rel="noopener" href="https://wiki.haskell.org/Monads_as_containers">Monads as Containers</a></p>
+<p><a target="_blank" rel="noopener" href="https://wiki.haskell.org/Monads_as_computation">Monads as Computation</a></p>
+<span id="more"></span>
+<p>Monad作为Haskell中非常核心的一个Typeclass，其概念和意义有很多种理解。本文是<a target="_blank" rel="noopener" href="https://wiki.haskell.org/HaskellWiki:Community">Haskell wiki</a>上的两篇文章<a target="_blank" rel="noopener" href="https://wiki.haskell.org/Monads_as_containers">《Monads as Containers》</a>和<a target="_blank" rel="noopener" href="https://wiki.haskell.org/Monads_as_computation">《Monads as Computation》</a>的笔记。</p>
+<h1 id="monad-as-containers">Monad as Containers</h1>
+<p>“容器”这种理解是科普时经常采用的，也是学习过程中最早期建立的理解。这种理解和<code>Monad</code>的定义有关：</p>
+<h2 id="monad-定义">Monad 定义</h2>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="type">Functor</span> f <span class="keyword">where</span></span></span><br><span class="line">    fmap :: (a -&gt; b) -&gt; f a -&gt; f b</span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="keyword">class</span> (<span class="type">Functor</span> <span class="title">m</span>) =&gt; <span class="type">Monad</span> m <span class="keyword">where</span></span></span><br><span class="line">    return :: a -&gt; m a</span><br><span class="line">    (&gt;&gt;=) :: m a -&gt; (a -&gt; m b) -&gt; m b</span><br><span class="line">    join :: m (m a) -&gt; m a</span><br></pre></td></tr></table></figure>
+<p>对于任意一个<code>Monad m</code>，<code>m</code>首先要是一个<code>Functor</code>。</p>
+<div class="note info"><p>其实在<code>Functor</code>和<code>Monad</code>中间还夹着一个<code>Applicative</code>，不过一方面历史原因<code>Applicative</code>出现较晚，导致标准库并没有这种约束，另一方面学习理解<code>Monad</code>暂时还不需要<code>Applicative</code>，这二者的详细讨论放在将来。</p>
+</div>
+<p>什么是<code>Functor</code>？最简单直观的理解就是一个<strong>容器</strong>，<code>f a</code>就是里面放着类型为<code>a</code>的数据，容器类型为<code>f</code>的这么一个东西。<code>Functor</code>提供了一个接口<code>fmap</code>，其含义是将一个普通的<code>a-&gt;b</code>函数<code>lift</code>成为<code>f a -&gt; f b</code>的函数，也可以认为是将容器外部的函数“包装”成了容器函数。可以看出，很多数据结构天然就是<code>Functor</code>。</p>
+<pre class="mermaid">
+graph LR
+A[a] --&gt; B[fmap f]--&gt; C[b]
+</pre>
+<p>那什么是<code>Monad</code>？用“容器”的观点，就是支持更多操作的<strong>更强</strong>的容器：</p>
+<ul>
+<li><code>fmap :: (a -&gt; b) -&gt; m a -&gt; m b</code>：把<code>a -&gt; b</code>的函数“提升”为<code>m a -&gt; m b</code>的函数</li>
+<li><code>return :: a -&gt; m a</code>：就是把一个数据<code>a</code>包装成<code>m a</code></li>
+<li><code>join :: m (m a) -&gt; m a</code>：把嵌套的容器“<strong>合并</strong>”成一个，flatten</li>
+</ul>
+<div class="note info"><p>这里将<code>join</code>当作<code>Monad</code>基本操作，而没有选取<code>(&gt;&gt;=)</code>，实际上两者是等价的可以转换，不过在范畴论里<code>join</code>是<code>Monad</code>定义的一部分。 <code>join</code>的理解是非常关键的，注意是“合并”，并不是简单的将外层容器去掉。</p>
+</div>
+<pre class="mermaid">
+graph LR
+subgraph bind
+    A[a] --&gt; B&gt;a -&gt; m b]
+    B --&gt; C[b]
+end
+</pre>
+<p>上面三种操作就是<code>Monad</code>定义的全部了，我们可以根据它们构造出更多工具。</p>
+<p>首先是<code>(&gt;&gt;=)</code>：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(&gt;&gt;=) :: (<span class="type">Monad</span> m) =&gt; m a -&gt; (a -&gt; m b) -&gt; m b</span><br><span class="line"><span class="title">xs</span> &gt;&gt;= f = join (fmap f xs)</span><br></pre></td></tr></table></figure>
+<p><code>(&gt;&gt;=)</code>英文名称叫bind，不知道应该怎么翻译。用“容器”的观点，就是将<code>m a</code>里面的数据<code>a</code>取出，放到<code>a -&gt; m b</code>的函数<code>f</code>里。其实现就是将<code>f</code>升格为<code>m a -&gt; m (m b)</code>，最后用<code>join</code>将多余的<code>m</code> flatten。</p>
+<p>标准库<code>Monad</code>的定义是<code>return</code>和<code>(&gt;&gt;=)</code>，用这两个可以导出<code>liftM</code>和<code>join</code>：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">liftM</span> :: (<span class="type">Monad</span> m) =&gt; (a -&gt; b) -&gt; m a -&gt; m b</span><br><span class="line"><span class="title">liftM</span> f xs = xs &gt;&gt;= (return . f)</span><br><span class="line"></span><br><span class="line"><span class="title">join</span> :: (<span class="type">Monad</span> m) =&gt; m (m a) -&gt; m a</span><br><span class="line"><span class="title">join</span> xss = xss &gt;&gt;= id</span><br></pre></td></tr></table></figure>
+<p><code>Monad</code>的基本定义就是这些，事实上一个定义良好的<code>Monad</code>还应该遵守三条单子律，不过在这里就不讨论了，放在后面Monads as Computation讨论。</p>
+<h2 id="monad-examples">Monad examples</h2>
+<p>前面提到过，对于初学者其实将<code>Monad</code>视作“容器”是很好理解的。但是，这种观点继续下去问题就大了，对于那些具体的Monad instance，这些“容器”是什么？</p>
+<h3 id="identity-a"><code>Identity a</code></h3>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">newtype</span> <span class="type">Identity</span> a = <span class="type">Identity</span> &#123; <span class="title">runIdentity</span> :: <span class="title">a</span> &#125;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Functor</span> <span class="type">Identity</span> <span class="keyword">where</span></span></span><br><span class="line">    fmap f (<span class="type">Identity</span> a) = <span class="type">Identity</span> (f a)</span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Monad</span> <span class="type">Identity</span> <span class="keyword">where</span></span></span><br><span class="line">    return = <span class="type">Identity</span></span><br><span class="line">    (<span class="type">Identity</span> a) &gt;&gt;= f = f a</span><br></pre></td></tr></table></figure>
+<p><code>Identity</code>这个类型，在类型中的地位相当于<code>id</code>在函数中的地位，就是什么都不做，直接封装。</p>
+<h3 id="maybe-a"><code>Maybe a</code></h3>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">Maybe</span> a = <span class="type">Nothing</span> | <span class="type">Just</span> a</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Functor</span> <span class="type">Maybe</span> <span class="keyword">where</span></span></span><br><span class="line">    fmap _ <span class="type">Nothing</span> = <span class="type">Nothing</span></span><br><span class="line">    fmap f (<span class="type">Just</span> a) = <span class="type">Just</span> (f a)</span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Monad</span> <span class="type">Maybe</span> <span class="keyword">where</span></span></span><br><span class="line">    return = <span class="type">Just</span></span><br><span class="line">    <span class="type">Nothing</span> &gt;&gt;= _ = <span class="type">Nothing</span></span><br><span class="line">    (<span class="type">Just</span> a) &gt;&gt;= f = f a</span><br></pre></td></tr></table></figure>
+<p><code>Maybe</code>这个类型代表了<strong>可能为空</strong>的容器，空就是<code>Nothing</code>，否则就是<code>Just x</code>，相当于其他语言中的<code>None</code>、<code>null</code>的处理。</p>
+<h3 id="a"><code>[a]</code></h3>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">List</span> a = <span class="type">Nil</span> | <span class="type">Cons</span> a (<span class="type">List</span> <span class="title">a</span>)</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Functor</span> <span class="type">List</span> <span class="keyword">where</span></span></span><br><span class="line">    fmap _ <span class="type">Nil</span> = <span class="type">Nil</span></span><br><span class="line">    fmap f (<span class="type">Cons</span> a <span class="keyword">as</span>) = <span class="type">Cons</span> (f a) (fmap f <span class="keyword">as</span>)</span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Monad</span> <span class="type">List</span> <span class="keyword">where</span></span></span><br><span class="line">    return a = <span class="type">Cons</span> a <span class="type">Nil</span></span><br><span class="line">    <span class="type">Nil</span> &gt;&gt;= _ = <span class="type">Nil</span></span><br><span class="line">    <span class="type">Cons</span> a <span class="keyword">as</span> &gt;&gt;= f = f a ++ (<span class="keyword">as</span> &gt;&gt;= f)</span><br></pre></td></tr></table></figure>
+<p><code>List</code>这个类型，代表了可能存储零个或者多个数据的容器，相当于数据结构中的单链表。</p>
+<h3 id="reader-r-a"><code>Reader r a</code></h3>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">newtype</span> <span class="type">Reader</span> r a = <span class="type">Reader</span> &#123; <span class="title">runReader</span> :: <span class="title">r</span> -&gt; <span class="title">a</span> &#125;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Functor</span> (<span class="type">Reader</span> <span class="title">r</span>) <span class="keyword">where</span></span></span><br><span class="line">    fmap f (<span class="type">Reader</span> m) = <span class="type">Reader</span> $ f . m</span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Monad</span> (<span class="type">Reader</span> <span class="title">r</span>) <span class="keyword">where</span></span></span><br><span class="line">    return x = <span class="type">Reader</span> $ \r -&gt; x</span><br><span class="line">    (<span class="type">Reader</span> m) &gt;&gt;= f = f . m</span><br></pre></td></tr></table></figure>
+<p>从<code>Reader r</code>这个类型开始，问题就变得奇怪了起来。复杂的Haskell类型，经常喜欢把一些函数封装成一个类型，这玩意儿也算是“容器”吗？它是怎么把数据<code>a</code>存储起来的？</p>
+<p><code>Reader r</code>是一个好的开始，毕竟这东西算是最简单的“函数封装成的类型”，用context的理解就是共享一个“只读”变量<code>r</code>的计算环境。但是这里我们希望能有一种“容器”视角的理解，怎么把这玩意儿看作一个容器。</p>
+<p>关键在于这个<code>r</code>，我们将它看作某种index下标，将一个<code>m :: Reader r a</code>看作是一个以<code>r</code>为下标，每个格子里存放类型<code>a</code>的数据的巨大容器。换言之，<code>runReader :: Reader r a -&gt; r -&gt; a</code>函数就相当于<code>lookup :: Eq a =&gt; [(a, b)] -&gt; a -&gt; Maybe b</code>，其作用就是对于一个<code>Reader</code>容器获取某个下标里面存放的数据。</p>
+<p>也就是说，逻辑上可以将<code>Reader r a</code>看作一个巨大无比的数组，当然数组的下标是有限整数，但这里的<code>r</code>可以是任意类型，这就是Haskell可怕的地方了，我们得到了一个无限大小的类似数组的容器，并且我们其实并没有为容器中的数据<code>a</code>们分配内存空间，每次需要的时候，计算即可。<code>Reader r a</code>的代码就相当于里面存储的数据，这就是“代码即数据”的最真切体现了吧。</p>
+<h3 id="state-s-a"><code>State s a</code></h3>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">newtype</span> <span class="type">State</span> s a = <span class="type">State</span> &#123;<span class="title">runState</span> :: <span class="title">s</span> -&gt; (<span class="title">a</span>, <span class="title">s</span>)&#125;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Functor</span> (<span class="type">State</span> <span class="title">s</span>) <span class="keyword">where</span></span></span><br><span class="line">    fmap f (<span class="type">State</span> m) = <span class="type">State</span> $ \s -&gt; <span class="keyword">let</span> (a, s&#x27;) = m s <span class="keyword">in</span> (f a, s&#x27;)</span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Monad</span> (<span class="type">State</span> <span class="title">s</span>) <span class="keyword">where</span></span></span><br><span class="line">    return a = <span class="type">State</span> $ \s -&gt; (a, s)</span><br><span class="line">    m &gt;&gt;= f = <span class="type">State</span> $ \s -&gt; <span class="keyword">let</span> (a, s&#x27;) = runState m s</span><br><span class="line">                                (b, t) = runState (f a) s&#x27;</span><br><span class="line">                            <span class="keyword">in</span> (b, t)</span><br></pre></td></tr></table></figure>
+<p>State Monad可以说是最有意思的Monad之一了，基于State Monad我们可以实现Imperative式的编程。</p>
+<p>如果使用computation或者context的视角，理解State Monad是非常简单水到渠成的事情：</p>
+<ul>
+<li><code>State s a</code>封装了一个<code>s -&gt; (a, s)</code>的函数，含义就是接受一个状态，返回结果<code>a</code>，和下一个状态<code>s'</code></li>
+<li><code>State s a</code>本身是描述这个计算过程，所以每次使用它必须输入一个起始状态<code>runState m s0</code></li>
+<li><code>m &gt;&gt;= f</code>的bind也就很好理解了，输入状态<code>s</code>，计算<code>m</code>得到中间结果<code>a</code>和新状态<code>s'</code>，将<code>a</code>送给<code>f</code>得到新的State Monad，将<code>s'</code>送给它得到最终的结果和状态。</li>
+</ul>
+<p>没错，State Monad很像一台自动机，其描述了给定某个状态，是怎么转移到下一个状态的，只不过这个自动机不消耗符号，反而每次转移“吐出”一个符号，而且每个节点只有一条出边。</p>
+<p>其实如果能够在脑海中想象出这么一张状态转移的图景，那么用“容器”的视角就很简单了。</p>
+<p><code>State s a</code>是一个巨大的容器，容器以<code>s</code>作为下标，里面存放了数据<code>a</code>和下一个节点<code>s'</code>。显然<code>Reader r a</code>是一个特殊的<code>State s a</code>，永远不去修改状态那么状态就是“只读”的。</p>
+<p>现在我们去用“容器”的观点理解<code>join</code>就水到渠成了：</p>
+<ul>
+<li><code>Reader r a</code>：<code>join</code>在巨大数组<code>mma</code>里检索<code>r</code>获得一个巨大数组<code>ma</code>，然后对<code>ma</code>检索<code>r</code>获得<code>a</code>，将<code>a</code>放在<code>r</code>的位置；</li>
+<li><code>State s a</code>：<code>join</code>在巨大数组<code>mm</code>里面检索<code>s</code>获得一个巨大数组<code>m</code>和新的下标<code>s'</code>，然后在<code>m</code>里检索<code>s'</code>获得<code>a</code>和又一个下标<code>t</code>，最后将<code>(a, t)</code>放在下标<code>s</code>的位置。</li>
+</ul>
+<p>其实从这两个例子也可以看出，为什么前面提到过<code>join</code>不是简单的将外层结构去掉，而是“合并”。</p>
+<p>将Monad视作存储数据的容器是很简单的观点，但是这个观点抽象层次太低，而且面对复杂的类型，我们很难想象出这个容器到底是怎么存储数据的，<code>State r a</code>尚且能够类比成数组或者Map，面对更复杂的<code>Parser</code>、<code>Cont</code>等等就很麻烦了。</p>
+<h1 id="monads-as-computation">Monads as Computation</h1>
+<p>将Monad视作计算本身是更高级的抽象，就像前面说的，一个程序本身是一段代码，这段代码本身就是数据。</p>
+<h2 id="计算的视角">计算的视角</h2>
+<p>Monads通常遵循下面几个前提：</p>
+<ul>
+<li>monadic的计算有结果：对于一个Monad <code>M</code>，一个类型为<code>M t</code>的值就是一段结果类型是<code>t</code>的计算；</li>
+<li>对于任意的值，存在一个计算“什么都不做”，将这个值作为结果：这就是<code>return :: Monad m =&gt; a -&gt; m a</code>；</li>
+<li>对于两个计算<code>x</code>和<code>y</code>，可以将他们组成一个更大的计算<code>x &gt;&gt; y</code>：其含义是先计算<code>x</code>，抛弃结果，计算<code>y</code>，将<code>y</code>的结果返回；</li>
+<li>更进一步，我们允许使用前一个计算的结果来<strong>决定</strong>接下来干什么：这就是<code>&gt;&gt;=</code>，<code>ma&gt;&gt;=f</code>含义就是先计算<code>ma</code>，其结果<code>a</code>决定了接下来进行计算<code>f a</code>。</li>
+</ul>
+<div class="note info"><p>上面就是计算视角的Monad定义，很容易发现，计算视角有两个很重要的词语“计算”和次序“。</p>
+<p>什么叫“计算”，计算一个<code>m :: M a</code>产生类型为<code>a</code>的结果，这个计算是指什么？</p>
+<p>“次序”是什么，先计算<code>x</code>后计算<code>y</code>，这个先后是指什么？</p>
+<p>需要指出的是，因为以这种方式理解Monad涉及到“计算次序”这个东西，所以很容易联想到Imperative Programming，所以误以为Monad的发明就是为了解决lazy computing的 计算次序不确定性这个问题。事实上这是完全错误的。</p>
+<p>“计算”和“次序”这两个词语，一定要绑定到具体的Monad才有意义，换言之，不同的Monad这两个词语的含义完全不同，这也是FP的魅力，简单的改变可以使同样的句子具有完全不一样 的含义。</p>
+<p>另一方面，的确可以使用Monad来实现Imperative那样的效果，但这是完全基于函数式和lazy computing的。<code>Monad</code>天然不是<code>IO</code>，但是<code>IO</code>天然是<code>Monad</code>。使用Monad来解 决<code>IO</code>是非常漂亮和自然的，<code>IO</code>它正好就是Monad，所以可以使用Monad的一众函数库。</p>
+</div>
+<h2 id="do-notation">Do notation</h2>
+<p>在进行下面的内容之前，先引入一个语法糖syntax-sugar：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">do</span> &#123; x &#125; = x</span><br><span class="line"><span class="title">do</span> &#123; x ; &lt;stmts&gt; &#125; = x &gt;&gt; <span class="keyword">do</span> &#123; &lt;stmts&gt; &#125;</span><br><span class="line"><span class="title">do</span> &#123; v &lt;- x ; &lt;stmts&gt; &#125; = x &gt;&gt;= \v -&gt; <span class="keyword">do</span> &#123; &lt;stmts&gt; &#125;</span><br><span class="line"><span class="title">do</span> &#123; <span class="keyword">let</span> &lt;decls&gt; ; &lt;stmts&gt; &#125; = <span class="keyword">let</span> &lt;decls&gt; <span class="keyword">in</span> <span class="keyword">do</span> &#123; &lt;stmts&gt; &#125;</span><br></pre></td></tr></table></figure>
+<p>这就是do notation，上面的替换发生在编译前期，ghc按照上面的规则将do转换为表达式。</p>
+<p>有了这个语法糖，我们可以轻易的写出各种简单漂亮“命令式”风格的代码：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">main</span> = <span class="keyword">do</span></span><br><span class="line">    putStrLn <span class="string">&quot;Enter a line of text:&quot;</span></span><br><span class="line">    x &lt;- getLine</span><br><span class="line">    putStrLn (reverse x)</span><br><span class="line"></span><br><span class="line"><span class="title">fibs</span> = <span class="number">1</span> : <span class="number">1</span> : [f1 + f2 | (f1, f2) &lt;- zip fibs (tail fibs)]</span><br></pre></td></tr></table></figure>
+<p>do notation确实是我见过的最漂亮的语法糖了，简单直观好用。</p>
+<div class="note warning"><p>需要注意，虽然do notation看起来非常有“命令式”的特点，但是这并不是命令式。</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">f</span> = <span class="keyword">do</span></span><br><span class="line">    x &lt;- f1</span><br><span class="line">    y &lt;- f2</span><br><span class="line">    z &lt;- f3</span><br><span class="line">    return (x, y, z)</span><br></pre></td></tr></table></figure>
+<p>这段代码如果是命令式，就是依次进行<code>f1, f2, f3</code>，将结果打包返回。</p>
+<p>但是前面一节强调过，这段代码的真实<strong>控制流</strong>取决于具体是哪一个Monad，因为do只是一个语法糖，上面代码被转换为<code>f1 &gt;&gt;= \x -&gt; f2 &gt;&gt;= \y -&gt; f3 &gt;&gt;= \z -&gt; return (x, y, z)</code>，所以重点是<code>(&gt;&gt;=)</code>是怎么实现的，对于<code>Parser</code>、<code>[a]</code>，可能会发生回溯backtracking，对于更复杂的Monad，例如<code>Cont</code>可能发生“中途截断”（类于命令式的<code>return</code>），甚至可能会发生并行计算。</p>
+<p>这里就举一个最简单的例子，List。</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">a</span> = <span class="keyword">do</span></span><br><span class="line">    x &lt;- [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">    y &lt;- [<span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line">    z &lt;- [<span class="number">6</span>]</span><br><span class="line"><span class="comment">--- a = [(1,4,6),(1,5,6),(2,4,6),(2,5,6),(3,4,6),(3,5,6)]</span></span><br></pre></td></tr></table></figure>
+</div>
+<h2 id="monad-laws">Monad Laws</h2>
+<p>Haskell中<code>Monad</code>的定义只要求<code>return</code>和<code>(&gt;&gt;=)</code>这两个函数，理论上我们可以写出各种各样的Monads，但是数学上的单子Monad有着更强的3条性质：</p>
+<ol type="1">
+<li><code>return v &gt;&gt;= f = f v</code></li>
+<li><code>x &gt;&gt;= return = x</code></li>
+<li><code>(x &gt;&gt;= f) &gt;&gt;= g = x &gt;&gt;= (\v -&gt; f v &gt;&gt;= g)</code></li>
+</ol>
+<p>直接看数学上美感不足，我们定义<code>(&gt;=&gt;)</code>：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(&gt;=&gt;) :: (<span class="type">Monad</span> m) =&gt; (a -&gt; m b) -&gt; (b -&gt; m c) -&gt; (a -&gt; m c)</span><br><span class="line"><span class="title">f</span> &gt;=&gt; g = \a -&gt; f a &gt;&gt;= g</span><br></pre></td></tr></table></figure>
+<p>三条单子律可以写作：</p>
+<ol type="1">
+<li><code>return &gt;=&gt; f = f</code></li>
+<li><code>f &gt;=&gt; return = f</code></li>
+<li><code>(f &gt;=&gt; g) &gt;=&gt; h = f &gt;=&gt; (g &gt;=&gt; h)</code></li>
+</ol>
+<p>前两条说明了<code>return</code>什么都不做，第三条说明了monadic的计算是具有结合律的，可以任意结合，也意味着可以任意拆分为monadic的计算。</p>
+<div class="note danger"><p>需要强调的是，ghc并不会检查这三条单子律，完全由Monad的提供者自己保证。如果你写出的Monad不满足这三条性质，可以通过编译，但是可能会在后续的计算中发生意料之外的错 误。因为如果不满足单子律，但是使用者还像一般的Monad那样对待它，结果就不可控了，尤其是第三条性质如果不满足，那么我们就不能任意拆分组合。</p>
+<p>最简单的反例就是带有计数器的容器：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">Foo</span> a = <span class="type">Foo</span> <span class="type">Int</span> a</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Functor</span> <span class="type">Foo</span> <span class="keyword">where</span></span></span><br><span class="line">    fmap f (<span class="type">Foo</span> n a) = <span class="type">Foo</span> (n+<span class="number">1</span>) (f a)</span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Monad</span> <span class="type">Foo</span> <span class="keyword">where</span></span></span><br><span class="line">    return a = <span class="type">Foo</span> <span class="number">1</span> a</span><br><span class="line">    (<span class="type">Foo</span> n1 a) &gt;&gt;= f = <span class="keyword">case</span> f a <span class="keyword">of</span> <span class="type">Foo</span> n2 b -&gt; <span class="type">Foo</span> (n1 + n2) b</span><br></pre></td></tr></table></figure>
+</div>
+<h2 id="工具箱">工具箱</h2>
+<p>事实上，如果将Monad视作计算，那么仅仅通过提供的<code>return</code>和<code>(&gt;&gt;=)</code>我们就可以实现很多复杂的控制结构，比如<a target="_blank" rel="noopener" href="http://www.haskell.org/ghc/docs/latest/html/libraries/base/Control-Monad.html"><code>Control.Monad</code></a>里面的各种控制函数。</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">sequence</span> :: <span class="type">Monad</span> m =&gt; [m a] -&gt; m [a]</span><br><span class="line"><span class="title">sequence</span> [] = return []</span><br><span class="line"><span class="title">sequence</span> (x:xs) = <span class="keyword">do</span></span><br><span class="line">    v &lt;- x</span><br><span class="line">    vs &lt;- sequence xs</span><br><span class="line">    return (v:vs)</span><br><span class="line"></span><br><span class="line"><span class="title">forM</span> :: <span class="type">Monad</span> m =&gt; [a] -&gt; (a -&gt; m b) -&gt; m [b]</span><br><span class="line"><span class="title">forM</span> xs f = sequence (map f xs)</span><br><span class="line"></span><br><span class="line"><span class="title">when</span> :: (<span class="type">Monad</span> m) =&gt; <span class="type">Bool</span> -&gt; m () -&gt; m ()</span><br><span class="line"><span class="title">when</span> p x = <span class="keyword">if</span> p <span class="keyword">then</span> x <span class="keyword">else</span> return ()</span><br><span class="line"></span><br><span class="line"><span class="title">liftM</span> :: (<span class="type">Monad</span> m) -&gt; (a -&gt; b) -&gt; m a -&gt; m b</span><br><span class="line"><span class="title">liftM</span> f x = <span class="keyword">do</span></span><br><span class="line">    v &lt;- x</span><br><span class="line">    return (f x)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>事实上，Monad非常强大，应用非常广泛，而它也只是人们发明的一种结构，<code>Arrow</code>是另一个强大的结构，其功能和魔力更加强大，日后学会了再讨论。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/06/24/Leetcode-1851/" rel="prev" title="Leetcode 1851">
+                  <i class="fa fa-chevron-left"></i> Leetcode 1851
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhuyk6</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{&quot;enable&quot;:true,&quot;theme&quot;:&quot;forest&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mermaid@8.9.3&#x2F;dist&#x2F;mermaid.min.js&quot;,&quot;integrity&quot;:&quot;sha256-OyJHvRcZHaRR6Ig73ppxF4QXk8HzvfgTprRWkulCkfY&#x3D;&quot;}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;,&quot;integrity&quot;:&quot;sha256-ncNI9OXOS5Ek4tzVYiOMmN&#x2F;KKCPZ6V0Cpv2P&#x2F;zHntiA&#x3D;&quot;}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
