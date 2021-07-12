@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CNiconne:300,300italic,400,400italic,700,700italic%7CFira+Code:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhuyk6.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Gemini&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Leetcode 488">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Leetcode 488">
+<meta property="og:url" content="https://zhuyk6.github.io/2021/07/13/Leetcode-488/index.html">
+<meta property="og:site_name" content="Zhuyk6&#39;s Blog">
+<meta property="og:description" content="Leetcode 488">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-07-12T17:35:48.000Z">
+<meta property="article:modified_time" content="2021-07-12T17:54:42.744Z">
+<meta property="article:author" content="zhuyk6">
+<meta property="article:tag" content="BFS">
+<meta property="article:tag" content="DFS">
+<meta property="article:tag" content="剪枝">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zhuyk6.github.io/2021/07/13/Leetcode-488/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhuyk6.github.io&#x2F;2021&#x2F;07&#x2F;13&#x2F;Leetcode-488&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;07&#x2F;13&#x2F;Leetcode-488&#x2F;&quot;,&quot;title&quot;:&quot;Leetcode 488&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>Leetcode 488 | Zhuyk6's Blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Zhuyk6's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+        <li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#description"><span class="nav-number">1.</span> <span class="nav-text">Description</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sample"><span class="nav-number">2.</span> <span class="nav-text">Sample</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hint"><span class="nav-number">3.</span> <span class="nav-text">Hint</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#solution"><span class="nav-number">4.</span> <span class="nav-text">Solution</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#code"><span class="nav-number">5.</span> <span class="nav-text">Code</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhuyk6</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuyk6" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuyk6" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhuyk6@foxmail.com" title="E-Mail → mailto:zhuyk6@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zhuyk6.github.io/2021/07/13/Leetcode-488/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhuyk6">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhuyk6's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Leetcode 488
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-07-13 01:35:48 / 修改时间：01:54:42" itemprop="dateCreated datePublished" datetime="2021-07-13T01:35:48+08:00">2021-07-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">刷题</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%88%B7%E9%A2%98/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/zuma-game/">Leetcode 488</a></p>
+<span id="more"></span>
+<h1 id="description">Description</h1>
+<p>回忆一下祖玛游戏。现在桌上有一串球，颜色有红色(R)，黄色(Y)，蓝色(B)，绿色(G)，还有白色(W)。 现在你手里也有几个球。</p>
+<p>每一次，你可以从手里的球选一个，然后把这个球插入到一串球中的某个位置上（包括最左端，最右端）。接着，如果有出现三个或者三个以上颜色相同的球相连的话，就把它们移除掉。重复这一步骤直到桌上所有的球都被移除。</p>
+<p>找到插入并可以移除掉桌上所有球所需的最少的球数。如果不能移除桌上所有的球，输出 <code>-1</code> 。</p>
+<h1 id="sample">Sample</h1>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：board = &quot;WRRBBW&quot;, hand = &quot;RB&quot;</span><br><span class="line">输出：-1</span><br><span class="line">解释：WRRBBW -&gt; WRR[R]BBW -&gt; WBBW -&gt; WBB[B]W -&gt; WW</span><br></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：board = &quot;WWRRBBWW&quot;, hand = &quot;WRBRW&quot;</span><br><span class="line">输出：2</span><br><span class="line">解释：WWRRBBWW -&gt; WWRR[R]BBWW -&gt; WWBBWW -&gt; WWBB[B]WW -&gt; WWWW -&gt; empty</span><br></pre></td></tr></table></figure>
+<p><strong>示例 3：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：board = &quot;G&quot;, hand = &quot;GGGGG&quot;</span><br><span class="line">输出：2</span><br><span class="line">解释：G -&gt; G[G] -&gt; GG[G] -&gt; empty </span><br></pre></td></tr></table></figure>
+<p><strong>示例 4：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：board = &quot;RBYYBBRRB&quot;, hand = &quot;YRBGB&quot;</span><br><span class="line">输出：3</span><br><span class="line">解释：RBYYBBRRB -&gt; RBYY[Y]BBRRB -&gt; RBBBRRB -&gt; RRRB -&gt; B -&gt; B[B] -&gt; BB[B] -&gt; empty </span><br></pre></td></tr></table></figure>
+<h1 id="hint">Hint</h1>
+<ul>
+<li>你可以假设桌上一开始的球中，不会有三个及三个以上颜色相同且连着的球。</li>
+<li><code>1 &lt;= board.length &lt;= 16</code></li>
+<li><code>1 &lt;= hand.length &lt;= 5</code></li>
+<li>输入的两个字符串均为非空字符串，且只包含字符 <code>'R','Y','B','G','W'</code>。</li>
+</ul>
+<h1 id="solution">Solution</h1>
+<p>非常明显的一道搜索题目。</p>
+<p>如果直接暴力搜索的话，枚举每一个球的插入位置，具体复杂度就不分析了，因为涉及增减，总之复杂度是很高的。</p>
+<p>肯定要剪枝。</p>
+<p>一种错误的剪枝：每次添加球一定是为了达成“消减”。所以每次只在连续的2个球添加。</p>
+<p>为什么说是错误的呢，示例3就是，有可能某种颜色只有一个。</p>
+<p>改进的剪枝：每次添加球，其左右位置一定有一样的颜色。</p>
+<p>这样依然是错误的。反例并不容易想到，测试数据中有一组数据：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">board = &quot;RRWWRRYYRR&quot;</span><br><span class="line">hand = &quot;WY&quot;</span><br></pre></td></tr></table></figure>
+<p>这组数据很容易想到先消除<code>'W'</code>，但是相邻的<code>R</code>就跟着消除了，这样一来<code>R</code>就不够用了。</p>
+<p>正确的答案是</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&quot;RRWWRRYYRR&quot;</span><br><span class="line">-&gt; &quot;R[Y]RWWRRYYRR&quot;</span><br><span class="line">-&gt; &quot;RYRW[W]WRRYYRR&quot;</span><br><span class="line">-&gt; &quot;RYRRRYYRR&quot;</span><br><span class="line">-&gt; &quot;RYYYRR&quot;</span><br><span class="line">-&gt; &quot;RRR&quot;</span><br><span class="line">-&gt; &quot;&quot;</span><br></pre></td></tr></table></figure>
+<p>你会发现，有时候会为了<strong>避免</strong>过多的资源消除掉，向相邻的相同资源中插入不同的元素。</p>
+<p>所以最终改进的剪枝策略：</p>
+<ul>
+<li>相邻颜色相同，任意颜色都可以插入</li>
+<li>相邻颜色不同，只能插入某个相同的颜色</li>
+<li>对于首尾，只会插入相同的颜色</li>
+</ul>
+<p>本题当然也可以使用BFS，但是并没有非常大的提升，主要的提升还是剪枝策略。</p>
+<p>本题可以对<code>hand</code>进行压缩，用一个五位数表示，有细微的性能提升，提升还不如BFS。</p>
+<h1 id="code">Code</h1>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @lc app=leetcode.cn id=488 lang=cpp</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * [488] 祖玛游戏</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @lc code=start</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">show</span><span class="params">(vector&lt;T&gt; v)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> x : v) cout &lt;&lt; x &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">    cout &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">int</span> MAX_INT = <span class="number">1e9</span>;</span><br><span class="line"><span class="keyword">const</span> array&lt;<span class="keyword">char</span>, 5&gt; colors = &#123;<span class="string">&#x27;R&#x27;</span>, <span class="string">&#x27;Y&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;G&#x27;</span>, <span class="string">&#x27;W&#x27;</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">eliminate</span> <span class="params">(string &amp; s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, j; i &lt; s.<span class="built_in">length</span>(); i = j) &#123;</span><br><span class="line">            <span class="keyword">for</span> (j = i+<span class="number">1</span>; j &lt; s.<span class="built_in">length</span>() &amp;&amp; s[j] == s[i]; ++j);</span><br><span class="line">            <span class="keyword">if</span> (j - i &gt;= <span class="number">3</span>) &#123;</span><br><span class="line">                s.<span class="built_in">erase</span>(i, j - i);</span><br><span class="line">                <span class="built_in">eliminate</span>(s);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">dfs</span><span class="params">(<span class="keyword">const</span> string &amp;&amp; board, </span></span></span><br><span class="line"><span class="params"><span class="function">            <span class="keyword">const</span> <span class="keyword">int</span> hand, </span></span></span><br><span class="line"><span class="params"><span class="function">            map&lt;pair&lt;string, <span class="keyword">int</span>&gt;, <span class="keyword">int</span>&gt; &amp; memo)</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (memo.<span class="built_in">find</span>(&#123;board, hand&#125;) != memo.<span class="built_in">end</span>()) &#123;</span><br><span class="line">            <span class="keyword">return</span> memo[&#123;board, hand&#125;];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (board.<span class="built_in">empty</span>()) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> ret = MAX_INT;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, c = <span class="number">1</span>; i &lt; <span class="number">5</span>; ++i, c *= <span class="number">10</span>)</span><br><span class="line">            <span class="keyword">if</span> (hand / c % <span class="number">10</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">// j = 0</span></span><br><span class="line">                <span class="keyword">if</span> (board[<span class="number">0</span>] == colors[i]) &#123;</span><br><span class="line">                    string tmp = board;</span><br><span class="line">                    tmp.<span class="built_in">insert</span>(<span class="number">0</span>, <span class="number">1</span>, colors[i]);</span><br><span class="line">                    <span class="built_in">eliminate</span>(tmp);</span><br><span class="line">                    <span class="keyword">int</span> r = <span class="built_in">dfs</span>(<span class="built_in">move</span>(tmp), hand - c, memo);</span><br><span class="line">                    <span class="keyword">if</span> (r != <span class="number">-1</span>) ret = <span class="built_in">min</span>(ret, r + <span class="number">1</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">int</span> n = board.<span class="built_in">length</span>();</span><br><span class="line">                <span class="comment">// j = n;</span></span><br><span class="line">                <span class="keyword">if</span> (board[n<span class="number">-1</span>] == colors[i]) &#123;</span><br><span class="line">                    string tmp = board;</span><br><span class="line">                    tmp.<span class="built_in">insert</span>(n, <span class="number">1</span>, colors[i]);</span><br><span class="line">                    <span class="built_in">eliminate</span>(tmp);</span><br><span class="line">                    <span class="keyword">int</span> r = <span class="built_in">dfs</span>(<span class="built_in">move</span>(tmp), hand - c, memo);</span><br><span class="line">                    <span class="keyword">if</span> (r != <span class="number">-1</span>) ret = <span class="built_in">min</span>(ret, r + <span class="number">1</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// j = 1..n-1</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; board.<span class="built_in">size</span>(); j++) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (board[j<span class="number">-1</span>] == board[j]) &#123;</span><br><span class="line">                        string tmp = board;</span><br><span class="line">                        tmp.<span class="built_in">insert</span>(j, <span class="number">1</span>, colors[i]);</span><br><span class="line">                        <span class="built_in">eliminate</span>(tmp);</span><br><span class="line">                        <span class="keyword">int</span> r = <span class="built_in">dfs</span>(<span class="built_in">move</span>(tmp), hand - c, memo);</span><br><span class="line">                        <span class="keyword">if</span> (r != <span class="number">-1</span>) ret = <span class="built_in">min</span>(ret, r + <span class="number">1</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (board[j<span class="number">-1</span>] == colors[i] </span><br><span class="line">                        || board[j] == colors[i]) &#123;</span><br><span class="line">                        string tmp = board;</span><br><span class="line">                        tmp.<span class="built_in">insert</span>(j, <span class="number">1</span>, colors[i]);</span><br><span class="line">                        <span class="built_in">eliminate</span>(tmp);</span><br><span class="line">                        <span class="keyword">int</span> r = <span class="built_in">dfs</span>(<span class="built_in">move</span>(tmp), hand - c, memo);</span><br><span class="line">                        <span class="keyword">if</span> (r != <span class="number">-1</span>) ret = <span class="built_in">min</span>(ret, r + <span class="number">1</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        memo[&#123;board, hand&#125;] = ret &lt; MAX_INT ? ret : <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">return</span> ret &lt; MAX_INT ? ret : <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findMinStep_DFS</span><span class="params">(string board, string hand)</span> </span>&#123;</span><br><span class="line">        map&lt;pair&lt;string, <span class="keyword">int</span>&gt;, <span class="keyword">int</span>&gt; memo;</span><br><span class="line">        <span class="keyword">int</span> _hand = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">char</span> ch : hand) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, c = <span class="number">1</span>; i &lt; <span class="number">5</span>; ++i, c *= <span class="number">10</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (colors[i] == ch)</span><br><span class="line">                    _hand += c;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">dfs</span>(<span class="built_in">move</span>(board), _hand, memo);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findMinStep</span><span class="params">(string board, string hand)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> _hand = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">char</span> ch : hand) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, c = <span class="number">1</span>; i &lt; <span class="number">5</span>; ++i, c *= <span class="number">10</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (colors[i] == ch)</span><br><span class="line">                    _hand += c;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">auto</span> bfs = [<span class="keyword">this</span>](string sb, <span class="keyword">int</span> sh) &#123;</span><br><span class="line">            queue&lt;tuple&lt;string, <span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt; que;</span><br><span class="line">            set&lt;pair&lt;string, <span class="keyword">int</span>&gt;&gt; vis;</span><br><span class="line"></span><br><span class="line">            que.<span class="built_in">push</span>(&#123;sb, sh, <span class="number">0</span>&#125;);</span><br><span class="line">            vis.<span class="built_in">insert</span>(&#123;sb, sh&#125;);</span><br><span class="line">            <span class="keyword">while</span> (!que.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">                <span class="keyword">auto</span> [b, h, d] = que.<span class="built_in">front</span>();</span><br><span class="line">                que.<span class="built_in">pop</span>();</span><br><span class="line">                <span class="keyword">if</span> (b.<span class="built_in">empty</span>()) <span class="keyword">return</span> d;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, c = <span class="number">1</span>; i &lt; <span class="number">5</span>; ++i, c *= <span class="number">10</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (h / c % <span class="number">10</span> == <span class="number">0</span>) <span class="keyword">continue</span>;</span><br><span class="line">                    <span class="keyword">int</span> n = b.<span class="built_in">length</span>();</span><br><span class="line">                    <span class="comment">// insert at 0</span></span><br><span class="line">                    <span class="keyword">if</span> (b[<span class="number">0</span>] == colors[i]) &#123;</span><br><span class="line">                        string tmp = b;</span><br><span class="line">                        tmp.<span class="built_in">insert</span>(<span class="number">0</span>, <span class="number">1</span>, colors[i]);</span><br><span class="line">                        <span class="built_in">eliminate</span>(tmp);</span><br><span class="line">                        <span class="keyword">int</span> _h = h - c;</span><br><span class="line">                        <span class="keyword">if</span> (vis.<span class="built_in">find</span>(&#123;tmp, _h&#125;) == vis.<span class="built_in">end</span>()) &#123;</span><br><span class="line">                            vis.<span class="built_in">insert</span>(&#123;tmp, _h&#125;);</span><br><span class="line">                            que.<span class="built_in">push</span>(&#123;<span class="built_in">move</span>(tmp), <span class="built_in">move</span>(_h), d+<span class="number">1</span>&#125;);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">// insert at n</span></span><br><span class="line">                    <span class="keyword">if</span> (b[n<span class="number">-1</span>] == colors[i]) &#123;</span><br><span class="line">                        string tmp = b;</span><br><span class="line">                        tmp.<span class="built_in">insert</span>(n, <span class="number">1</span>, colors[i]);</span><br><span class="line">                        <span class="built_in">eliminate</span>(tmp);</span><br><span class="line">                        <span class="keyword">int</span> _h = h - c;</span><br><span class="line">                        <span class="keyword">if</span> (vis.<span class="built_in">find</span>(&#123;tmp, _h&#125;) == vis.<span class="built_in">end</span>()) &#123;</span><br><span class="line">                            vis.<span class="built_in">insert</span>(&#123;tmp, _h&#125;);</span><br><span class="line">                            que.<span class="built_in">push</span>(&#123;<span class="built_in">move</span>(tmp), <span class="built_in">move</span>(_h), d+<span class="number">1</span>&#125;);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">// insert at 1..n-1</span></span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; n; ++j) &#123;</span><br><span class="line">                        <span class="keyword">if</span> (b[j<span class="number">-1</span>] == b[j]) &#123;</span><br><span class="line">                            string tmp = b;</span><br><span class="line">                            tmp.<span class="built_in">insert</span>(j, <span class="number">1</span>, colors[i]);</span><br><span class="line">                            <span class="built_in">eliminate</span>(tmp);</span><br><span class="line">                            <span class="keyword">int</span> _h = h - c;</span><br><span class="line">                            <span class="keyword">if</span> (vis.<span class="built_in">find</span>(&#123;tmp, _h&#125;) == vis.<span class="built_in">end</span>()) &#123;</span><br><span class="line">                                vis.<span class="built_in">insert</span>(&#123;tmp, _h&#125;);</span><br><span class="line">                                que.<span class="built_in">push</span>(&#123;<span class="built_in">move</span>(tmp), <span class="built_in">move</span>(_h), d+<span class="number">1</span>&#125;);</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">else</span> <span class="keyword">if</span> (b[j<span class="number">-1</span>] == colors[i]</span><br><span class="line">                            || b[j] == colors[i]) &#123;</span><br><span class="line">                            string tmp = b;</span><br><span class="line">                            tmp.<span class="built_in">insert</span>(j, <span class="number">1</span>, colors[i]);</span><br><span class="line">                            <span class="built_in">eliminate</span>(tmp);</span><br><span class="line">                            <span class="keyword">int</span> _h = h - c;</span><br><span class="line">                            <span class="keyword">if</span> (vis.<span class="built_in">find</span>(&#123;tmp, _h&#125;) == vis.<span class="built_in">end</span>()) &#123;</span><br><span class="line">                                vis.<span class="built_in">insert</span>(&#123;tmp, _h&#125;);</span><br><span class="line">                                que.<span class="built_in">push</span>(&#123;<span class="built_in">move</span>(tmp), <span class="built_in">move</span>(_h), d+<span class="number">1</span>&#125;);</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">bfs</span>(board, _hand);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/BFS/" rel="tag"><i class="fa fa-tag"></i> BFS</a>
+              <a href="/tags/DFS/" rel="tag"><i class="fa fa-tag"></i> DFS</a>
+              <a href="/tags/%E5%89%AA%E6%9E%9D/" rel="tag"><i class="fa fa-tag"></i> 剪枝</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/07/06/Leetcode-410/" rel="prev" title="Leetcode 410">
+                  <i class="fa fa-chevron-left"></i> Leetcode 410
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhuyk6</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{&quot;enable&quot;:true,&quot;theme&quot;:&quot;forest&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mermaid@8.9.3&#x2F;dist&#x2F;mermaid.min.js&quot;,&quot;integrity&quot;:&quot;sha256-OyJHvRcZHaRR6Ig73ppxF4QXk8HzvfgTprRWkulCkfY&#x3D;&quot;}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;,&quot;integrity&quot;:&quot;sha256-ncNI9OXOS5Ek4tzVYiOMmN&#x2F;KKCPZ6V0Cpv2P&#x2F;zHntiA&#x3D;&quot;}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
