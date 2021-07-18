@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CNiconne:300,300italic,400,400italic,700,700italic%7CFira+Code:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhuyk6.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Gemini&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
+<meta name="description" content="本文介绍Haskell的一个著名parser库Parsec，本文主要关注实现部分和理论，主要参考是其论文《Parsec: Direct Style Monadic Parser Combinators For The Real World》。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Parsec: Monadic Parser Combinators">
+<meta property="og:url" content="https://zhuyk6.github.io/2021/07/16/Parsec-Monadic-Parser-Combinators/index.html">
+<meta property="og:site_name" content="Zhuyk6&#39;s Blog">
+<meta property="og:description" content="本文介绍Haskell的一个著名parser库Parsec，本文主要关注实现部分和理论，主要参考是其论文《Parsec: Direct Style Monadic Parser Combinators For The Real World》。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-07-15T21:30:06.000Z">
+<meta property="article:modified_time" content="2021-07-18T23:34:12.254Z">
+<meta property="article:author" content="zhuyk6">
+<meta property="article:tag" content="parser">
+<meta property="article:tag" content="Parsec">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zhuyk6.github.io/2021/07/16/Parsec-Monadic-Parser-Combinators/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhuyk6.github.io&#x2F;2021&#x2F;07&#x2F;16&#x2F;Parsec-Monadic-Parser-Combinators&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;07&#x2F;16&#x2F;Parsec-Monadic-Parser-Combinators&#x2F;&quot;,&quot;title&quot;:&quot;Parsec: Monadic Parser Combinators&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>Parsec: Monadic Parser Combinators | Zhuyk6's Blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Zhuyk6's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+        <li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#grammars-and-parsers"><span class="nav-number">1.</span> <span class="nav-text">Grammars and Parsers</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#grammars"><span class="nav-number">1.1.</span> <span class="nav-text">Grammars</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#parser"><span class="nav-number">1.2.</span> <span class="nav-text">Parser</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#left-recursion"><span class="nav-number">1.3.</span> <span class="nav-text">Left recursion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#backtracking"><span class="nav-number">1.4.</span> <span class="nav-text">Backtracking</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ll-grammar"><span class="nav-number">1.5.</span> <span class="nav-text">LL Grammar</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#restricting-lookahead"><span class="nav-number">2.</span> <span class="nav-text">Restricting lookahead</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#basic-combinators"><span class="nav-number">2.1.</span> <span class="nav-text">Basic combinators</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#infinite-lookahead"><span class="nav-number">2.2.</span> <span class="nav-text">Infinite lookahead</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#error-messages"><span class="nav-number">3.</span> <span class="nav-text">Error Messages</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#basic-parser"><span class="nav-number">3.1.</span> <span class="nav-text">Basic parser</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#labels"><span class="nav-number">3.2.</span> <span class="nav-text">Labels</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9C%9F%E5%AE%9E%E7%9A%84parsec"><span class="nav-number">4.</span> <span class="nav-text">真实的Parsec</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhuyk6</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuyk6" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuyk6" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhuyk6@foxmail.com" title="E-Mail → mailto:zhuyk6@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zhuyk6.github.io/2021/07/16/Parsec-Monadic-Parser-Combinators/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhuyk6">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhuyk6's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Parsec: Monadic Parser Combinators
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-07-16 05:30:06" itemprop="dateCreated datePublished" datetime="2021-07-16T05:30:06+08:00">2021-07-16</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-07-19 07:34:12" itemprop="dateModified" datetime="2021-07-19T07:34:12+08:00">2021-07-19</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Languages/" itemprop="url" rel="index"><span itemprop="name">Languages</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Languages/Haskell/" itemprop="url" rel="index"><span itemprop="name">Haskell</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>本文介绍Haskell的一个著名parser库<code>Parsec</code>，本文主要关注实现部分和理论，主要参考是其论文<a target="_blank" rel="noopener" href="https://www.microsoft.com/en-us/research/publication/parsec-direct-style-monadic-parser-combinators-for-the-real-world/">《Parsec: Direct Style Monadic Parser Combinators For The Real World》</a>。</p>
+<span id="more"></span>
+<h1 id="grammars-and-parsers">Grammars and Parsers</h1>
+<h2 id="grammars">Grammars</h2>
+<p>首先要简单复习一下编译原理的知识，文法是描述语言的规则，基本可以分为以下四类：</p>
+<ol start="0" type="1">
+<li>Unrestricted；</li>
+<li>Context sensitive grammar；</li>
+<li>Context free grammar</li>
+<li>Regular grammar</li>
+</ol>
+<p>简单说一下区别：</p>
+<ol start="0" type="1">
+<li>0类文法没有任意限制，其产生式怎么写都行（左边可以为<strong>空</strong>），也代表了语言最大的集合（废话，没有任何限制）；</li>
+<li>上下文相关文法，产生式左边不为空，也可以任意写，允许左边出现多个<strong>非终结符</strong>和<strong>终结符</strong>；</li>
+<li>上下文无关文法，产生式左边仅为一个<strong>非终结符</strong>；</li>
+<li>正则文法，线性文法，只能写作右线性（或者左线性）。</li>
+</ol>
+<blockquote>
+<p>上述4类文法为继承关系，描述的语言集合越来越小。</p>
+</blockquote>
+<p>特别说明一下，“<strong>上下文</strong>”的含义，从文法的角度，上下文相关就是允许出现下面的产生式： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">aA -&gt; ahello</span><br><span class="line">bA -&gt; bworld</span><br><span class="line">ABC -&gt; epsilon</span><br></pre></td></tr></table></figure> 所以这个“<strong>上下文</strong>”指的就是产生式左边的结构，也符合我们的语言习惯，我的理解就是如何解读一个词的含义，需要借助上下文。</p>
+<p>而上下文无关文法就没有这个问题，因为其产生式左边只有一个<strong>非终结符</strong>，只需要关心产生式右边即可。大部分计算机语言都使用改造的CFG。</p>
+<h2 id="parser">Parser</h2>
+<p>Parser是个啥，简单来说就是某种运算，输入是一个字符串（或者流），输出是一个结构（比如AST），所以很容易将Parser定义为： <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">type</span> <span class="type">Parser</span> a = <span class="type">String</span> -&gt; (<span class="title">a</span>, <span class="type">String</span>)</span></span><br></pre></td></tr></table></figure> 其含义就是消耗字符串<code>s</code>，得到结果<code>a</code>和剩余的字符串<code>s'</code>。</p>
+<p>有两种构造Parser的方法：monadic和applicative。核心区别在于下面两个函数： <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(&lt;*&gt;) :: <span class="type">Applicative</span> <span class="type">Parser</span> =&gt; <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> (a -&gt; b) -&gt; <span class="type">Parser</span> b</span><br><span class="line">(&gt;&gt;=) :: <span class="type">Monad</span> <span class="type">Parser</span> =&gt; <span class="type">Parser</span> a -&gt; (a -&gt; <span class="type">Parser</span> b) -&gt; <span class="type">Parser</span> b</span><br></pre></td></tr></table></figure> 仅仅看类型就能可以知道，从语义上说，monad parser可以解析上下文相关语言，因为<code>Parser b</code>本身是依赖<code>Parser a</code>的；而applicative parser则不具备这种<strong>上下文</strong>的依赖，所以其至多只能描述上下文无关文法CFG。</p>
+<blockquote>
+<p>虽然applicative语义更弱，不过正是其语义上就不存在前后的约束，可以很好的实现并行计算，有相关的工作，虽然我还是不知道applicative parser怎么实现，以后有机会再学习。</p>
+</blockquote>
+<p>论文中举了一个简单的例子：parse一个xml文档。我们知道这种标签语言需要前后标签匹配，对于context-free parser，需要一次独立的parse才能够保证这种匹配；而对于monadic parser，可以很轻易的实现这一点： <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">xml</span> = </span><br><span class="line">  <span class="keyword">do</span> &#123; name &lt;- openTag</span><br><span class="line">     ; content &lt;- many xml</span><br><span class="line">     ; endTag name</span><br><span class="line">     ; return (<span class="type">Node</span> name context)</span><br><span class="line">     &#125;</span><br><span class="line">  &lt;|&gt; xmlText</span><br><span class="line">    </span><br></pre></td></tr></table></figure> 没错，虽然我们parse的是一个CFG，但是用monadic parser可以将几个简单的parser很轻易的组合成一个复杂的parser，这也是parser combinator的魅力。</p>
+<h2 id="left-recursion">Left recursion</h2>
+<p>大多数parser combinators都无法处理<strong>左递归</strong>，<code>Parsec</code>也不例外。如果遇到左递归，就会进入死循环。例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">expr -&gt; expr &quot;+&quot; factor</span><br><span class="line">factor -&gt; number | &quot;(&quot; expr &quot;)&quot;</span><br></pre></td></tr></table></figure>
+<p>这个表达式的文法，是不能直接翻译为parser combinator的，因为存在左递归。</p>
+<p>幸运的是，所有<strong>左递归</strong>的文法都可以翻译为<strong>右递归</strong>；同时也可以定义一个名为<code>chainl</code>的combinator，可以直接计算左结合的表达式。</p>
+<blockquote>
+<p>能否让parser自己判断是否存在<strong>左递归</strong>？文章中提到了一种名为“sharing”的技术，大概是在context里面加入一些硬件描述，然后判断当前程序的状态。</p>
+<p>因此，所有的combinator libraries都强制使用<strong>预测</strong>性的parse算法，也就是LL。</p>
+</blockquote>
+<h2 id="backtracking">Backtracking</h2>
+<p>对于<strong>歧义</strong>文法，parse tree可能有多棵，parser的返回值应该是一个列表，这种情况下，由于要考虑每种情况，所以不可避免要产生<strong>回溯</strong>。</p>
+<p>然而在现实中，几乎不会需要处理“歧义文法”，<code>parsec</code>对于歧义文法，只返回一种可能的parse tree。</p>
+<p>即使处理的文法是非歧义的，有时候我们仍然需要回溯，因为parser可能需要“看得更远一些”。一个简单的例子是分析关键词<code>let</code>：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">keywordLet</span> = <span class="keyword">do</span> </span><br><span class="line">  &#123;</span><br><span class="line">    string <span class="string">&quot;let&quot;</span></span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">  &lt;|&gt; ...</span><br></pre></td></tr></table></figure>
+<p>很容易发现，为了区分关键词<code>let</code>和变量<code>letvariable</code>，我们不得不在parse失败后回溯，因为在处理到第4个字符之前都无法区分这二者。</p>
+<p>大量使用backtracking可能会导致内存泄漏，核心原因就是<code>choice</code> combinator的实现，对于<code>p &lt;|&gt; q</code>的一种朴素的实现，当<code>p</code> parse失败，回溯并尝试<code>q</code>。当输入很大的时候就会发生内存泄漏（爆栈）。</p>
+<h2 id="ll-grammar">LL Grammar</h2>
+<p>如何限制内存泄漏，只需要限制“先前看”的深度即可。</p>
+<p>LL文法具有“非歧义”和“无左递归”的性质，一个文法是LL(k)的，意味着最多只需要“向前看”k个字符就可以确定文法树。例如，下面就是一个LL(2)的文法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">S -&gt; PQ | Q</span><br><span class="line">P -&gt; &quot;p&quot;</span><br><span class="line">Q -&gt; &quot;pq&quot;</span><br></pre></td></tr></table></figure>
+<p>如果第一个字符是<code>'p'</code>，显然无法确定是<code>P</code>还是<code>Q</code>，不过再来一个字符就可以确定了。该文法可以写作下面的代码：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">s</span> = (p &gt;&gt; q) &lt;|&gt; q</span><br><span class="line"><span class="title">p</span> = char &#x27;p&#x27;</span><br><span class="line"><span class="title">q</span> = char &#x27;p&#x27; &gt;&gt; char &#x27;q&#x27;</span><br></pre></td></tr></table></figure>
+<p>然而LL文法并不总是可以像这样简单的翻译成代码，例如下面的文法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">S -&gt; PQ</span><br><span class="line">P -&gt; &quot;p&quot; | epsilon</span><br><span class="line">Q -&gt; &quot;pq&quot;</span><br></pre></td></tr></table></figure>
+<p>如果翻译成代码：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">s</span> = p &gt;&gt; q</span><br><span class="line"><span class="title">p</span> = char &#x27;p&#x27; &lt;|&gt; return ()</span><br><span class="line"><span class="title">q</span> = char &#x27;p&#x27; &gt;&gt; char &#x27;q&#x27;</span><br></pre></td></tr></table></figure>
+<p>对于输入串<code>"pq"</code>，会先parse <code>p</code>，消耗一个字符<code>'p'</code>，然后parse <code>q</code>，失败。</p>
+<p>一般来说，对于 <span class="math inline">\(PQ\)</span> ，其中 <span class="math inline">\(P \Rightarrow^\star \epsilon\)</span> ，并且 <span class="math inline">\(\text{First}(P) \bigcup \text{First}(Q) \neq \emptyset\)</span> ，文法需要改写为 <span class="math inline">\(P&#39;Q \ |\  Q\)</span> ， 其中 <span class="math inline">\(P&#39;\)</span> 不再生成 <span class="math inline">\(\epsilon\)</span> 。</p>
+<p>LL(<span class="math inline">\(\infty\)</span>) 是一类强大的文法，任意非歧义的CFG都可以转化为LL(<span class="math inline">\(\infty\)</span>)。在实践中，很多语言都需要任意的“向前看”，例如Haskell中的类型标记或C中的声明。</p>
+<h1 id="restricting-lookahead">Restricting lookahead</h1>
+<p>通过前面的一系列铺垫，为了解决<strong>内存泄漏</strong>并添加良好的<strong>错误处理</strong>，<code>parsec</code>限制“向前看”的行为，所以<code>parsec</code>中的parser是LL(1) parser——永远只根据当前的一个字符来决定分支。也就是说，<code>p &lt;|&gt; q</code>意味着，当且仅当<code>p</code> parse失败并且没有消耗任何输入，才会尝试<code>q</code>。</p>
+<p>为了实现LL(1)，需要对输入的消耗进行跟踪，如下定义：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">newtype</span> <span class="type">Parser</span> a = <span class="type">Parser</span> &#123; <span class="title">unParser</span> :: <span class="type">String</span> -&gt; <span class="type">Consumed</span> <span class="title">a</span>&#125;</span></span><br><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">Consumed</span> a = <span class="type">Consumed</span> (<span class="type">Reply</span> <span class="title">a</span>) | <span class="type">Empty</span> (<span class="type">Reply</span> <span class="title">a</span>)</span></span><br><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">Reply</span> a = <span class="type">Ok</span> a <span class="type">String</span> | <span class="type">Error</span></span></span><br></pre></td></tr></table></figure>
+<p>该模型将parser的结果分成四类：</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"></th>
+<th style="text-align: center;"><code>Consumed</code></th>
+<th style="text-align: center;"><code>Empty</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><code>Ok</code></td>
+<td style="text-align: center;">消耗符号，结果正确</td>
+<td style="text-align: center;">不消耗，结果正确</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>Error</code></td>
+<td style="text-align: center;">消耗符号，结果错误</td>
+<td style="text-align: center;">不消耗，结果错误</td>
+</tr>
+</tbody>
+</table>
+<h2 id="basic-combinators">Basic combinators</h2>
+<p>根据上面的定义，实现一些基本的parser combinator。</p>
+<p>首先是Monad的定义，<code>return</code>应该永远成功，并且不消耗符号。</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">return</span> x = <span class="type">Parser</span> $ \s -&gt; <span class="type">Empty</span> (<span class="type">Ok</span> x s)</span><br></pre></td></tr></table></figure>
+<p><code>(&gt;&gt;=)</code>就复杂很多，因为parse的结果被我们分成了四类，所以这里需要分类讨论<code>(p &gt;&gt;= q)</code>：如果<code>p</code>错误，那就直接返回错误，如果<code>p</code>和<code>q</code>都没有错误，<code>Consumed</code>的表格如下：</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><code>p</code></th>
+<th style="text-align: center;"><code>q</code></th>
+<th style="text-align: center;"><code>p &gt;&gt;= q</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Empty</td>
+<td style="text-align: center;">Empty</td>
+<td style="text-align: center;">Empty</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Empty</td>
+<td style="text-align: center;">Consumed</td>
+<td style="text-align: center;">Consumed</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Consumed</td>
+<td style="text-align: center;">Empty</td>
+<td style="text-align: center;">Consumed</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Consumed</td>
+<td style="text-align: center;">Consumed</td>
+<td style="text-align: center;">Consumed</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">p</span> &gt;&gt;= f = <span class="type">Parser</span> $ \s -&gt; <span class="keyword">case</span> runParser p s <span class="keyword">of</span></span><br><span class="line">  <span class="type">Empty</span> (<span class="type">Ok</span> x s&#x27;)    -&gt; runParser (f x) s&#x27;</span><br><span class="line">  <span class="type">Empty</span> <span class="type">Error</span>        -&gt; <span class="type">Empty</span> <span class="type">Error</span></span><br><span class="line">  <span class="type">Consumed</span> (<span class="type">Ok</span> x s&#x27;) -&gt; <span class="keyword">case</span> runParser (f x) s&#x27; <span class="keyword">of</span></span><br><span class="line">                          <span class="type">Consumed</span> reply -&gt; <span class="type">Consumed</span> reply</span><br><span class="line">                          <span class="type">Empty</span> reply    -&gt; <span class="type">Consumed</span> reply</span><br><span class="line">  <span class="type">Consumed</span> <span class="type">Error</span>     -&gt; <span class="type">Consumed</span> <span class="type">Error</span></span><br></pre></td></tr></table></figure>
+<p>接下来就是<code>(&lt;|&gt;)</code>，一定要注意，这是LL(1)的，也就是只有<code>Empty Error</code>，才会尝试第二个parser。（论文中当<code>p</code>返回<code>Empty Ok</code>也会尝试<code>q</code>，不过最新的<code>parsec</code>已经改为仅当失败零消耗才尝试备选项）</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">p</span> &lt;|&gt; q = <span class="type">Parser</span> $ \s -&gt; <span class="keyword">case</span> runParser p s <span class="keyword">of</span></span><br><span class="line">  <span class="type">Empty</span> <span class="type">Error</span> -&gt; runParser q s</span><br><span class="line">  result      -&gt; result</span><br></pre></td></tr></table></figure>
+<p>下面就可以定义一些简单的parser combinator：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">satisfy</span> :: (<span class="type">Char</span> -&gt; <span class="type">Bool</span>) -&gt; <span class="type">Parser</span> <span class="type">Char</span></span><br><span class="line"><span class="title">satisfy</span> test = <span class="type">Parser</span> $ \s -&gt; <span class="keyword">case</span> s <span class="keyword">of</span></span><br><span class="line">  []                 -&gt; <span class="type">Empty</span> <span class="type">Error</span></span><br><span class="line">  (c:cs) | test c    -&gt; <span class="type">Consumed</span> (<span class="type">Ok</span> c cs)</span><br><span class="line">         | otherwise -&gt; <span class="type">Empty</span> <span class="type">Error</span></span><br><span class="line"></span><br><span class="line"><span class="title">char</span> c = satisfy (== c)</span><br><span class="line"><span class="title">letter</span> = satisfy isAlpha</span><br><span class="line"><span class="title">digit</span>  = satisfy isDigit</span><br><span class="line"></span><br><span class="line"><span class="title">string</span> :: <span class="type">String</span> -&gt; <span class="type">Parser</span> <span class="type">String</span></span><br><span class="line"><span class="title">string</span> <span class="string">&quot;&quot;</span> = return []</span><br><span class="line"><span class="title">string</span> (c:cs) = <span class="keyword">do</span></span><br><span class="line">  x &lt;- char c</span><br><span class="line">  xs &lt;- string cs</span><br><span class="line">  return (x:xs)</span><br><span class="line"></span><br><span class="line"><span class="title">many</span> :: <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> [a]</span><br><span class="line"><span class="title">many</span> p =</span><br><span class="line">  <span class="keyword">do</span> &#123; x &lt;- p</span><br><span class="line">     ; xs &lt;- many p</span><br><span class="line">     ; return (x:xs)</span><br><span class="line">     &#125;</span><br><span class="line">  &lt;|&gt; return []</span><br><span class="line"></span><br><span class="line"><span class="title">many1</span> p = <span class="keyword">do</span></span><br><span class="line">  x &lt;- p</span><br><span class="line">  xs &lt;- many p</span><br><span class="line">  return (x:xs)</span><br><span class="line"></span><br><span class="line"><span class="title">identifier</span> = many1 (letter &lt;|&gt; digit &lt;|&gt; char &#x27;_&#x27;)</span><br></pre></td></tr></table></figure>
+<h2 id="infinite-lookahead">Infinite lookahead</h2>
+<p>如果只能够parse LL(1)文法，那<code>parsec</code>也太弱了，前面提到过，为了性能限制默认实现为LL(1)，但是很多时候不得不需要backtracking，也就需要“向前看”。<code>try</code>就是干这个用的。</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">try</span> :: <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> a</span><br><span class="line"><span class="title">try</span> p = <span class="type">Parser</span> $ \s -&gt; <span class="keyword">case</span> runParser p s <span class="keyword">of</span></span><br><span class="line">  <span class="type">Consumed</span> <span class="type">Error</span> -&gt; <span class="type">Empty</span> <span class="type">Error</span></span><br><span class="line">  other          -&gt; other</span><br></pre></td></tr></table></figure>
+<p>我们会发现，<code>try</code>只是在<code>p</code>失败后，将<code>Consumed</code>修改为<code>Empty</code>，重新抛出错误。也就是说，<code>p</code>的失败将不会消耗符号，所以可以将<code>try</code>和<code>(&lt;|&gt;)</code>组合在一起，<code>try p &lt;|&gt; q</code>当<code>p</code>失败，回溯并尝试<code>q</code>。</p>
+<p>因此，如果我们将<code>try</code>放在所有地方，也就重新得到了LL(<span class="math inline">\(\infty\)</span>)，不过一定需要留意，因为<code>try</code>会发生回溯，所以可能会存在潜在的内存泄漏风险，实际使用中应该尽量避免使用<code>try</code>。</p>
+<p>不过前文也说过，<code>try</code>的使用不可避免，还是<code>let</code>的例子：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">expr</span> = </span><br><span class="line">  <span class="keyword">do</span> &#123;</span><br><span class="line">      string <span class="string">&quot;let&quot;</span></span><br><span class="line">    ; whiteSpace</span><br><span class="line">    ; letExpr</span><br><span class="line">    &#125; </span><br><span class="line">  &lt;|&gt; identifier</span><br></pre></td></tr></table></figure>
+<p>这样写是错误的，因为当第一部分错误时，已经产生了字符消耗，不会跳转到第二个分支，正确的写法是下面这样：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">expr</span> = </span><br><span class="line">  try <span class="keyword">do</span> &#123;</span><br><span class="line">    string <span class="string">&quot;let&quot;</span></span><br><span class="line">  ; whiteSpace </span><br><span class="line">  ; letExpr</span><br><span class="line">  &#125;</span><br><span class="line">  &lt;|&gt; identifier</span><br></pre></td></tr></table></figure>
+<h1 id="error-messages">Error Messages</h1>
+<p>限制LL(1)的好处，除了性能优势外，也很容易实现“报错”。</p>
+<p>首先，我们将附加一个跟踪信息，用来标识当前所处的字符串的位置。</p>
+<p>除了位置，我们还可以在parse的过程中，动态生成产生式的Frist集合，其含义就是当前“期待”的字符。</p>
+<blockquote>
+<p>增加的这些辅助信息并不会导致parser增加很大的开销，因为Haskell是lazy的，只有在需要的时候（遇到错误报错）才会计算这些信息。</p>
+</blockquote>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">newtype</span> <span class="type">Parser</span> a = <span class="type">P</span> &#123; <span class="title">unP</span> :: <span class="type">State</span> -&gt; <span class="type">Consumed</span> <span class="title">a</span> &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">State</span> = <span class="type">State</span> &#123;</span></span><br><span class="line"><span class="class">    <span class="title">stateString</span> :: <span class="type">String</span>,  <span class="comment">-- left input string</span></span></span><br><span class="line"><span class="class">    <span class="title">statePos</span>    :: <span class="type">Pos</span>      <span class="comment">-- current pos : (row, col)</span></span></span><br><span class="line"><span class="class">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">Consumed</span> a =</span></span><br><span class="line">    <span class="type">Consumed</span> (<span class="type">Reply</span> a)</span><br><span class="line">  | <span class="type">Empty</span> (<span class="type">Reply</span> a)</span><br><span class="line">  <span class="keyword">deriving</span> (<span class="type">Functor</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">Reply</span> a =</span></span><br><span class="line">    <span class="type">Ok</span> a <span class="type">State</span> <span class="type">Message</span></span><br><span class="line">  | <span class="type">Error</span> <span class="type">Message</span></span><br><span class="line">  <span class="keyword">deriving</span> (<span class="type">Functor</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">Message</span> = <span class="type">Msg</span> <span class="type">Pos</span> <span class="type">String</span> [<span class="type">String</span>]  <span class="comment">-- error&#x27;s pos, unexpected and expected</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">type</span> <span class="type">Pos</span> = (<span class="type">Int</span>, <span class="type">Int</span>) <span class="comment">-- row and column </span></span></span><br></pre></td></tr></table></figure>
+<h2 id="basic-parser">Basic parser</h2>
+<p>修改后的定义，其Monad实现也要对错误信息进行处理：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">parserReturn</span> :: a -&gt; <span class="type">Parser</span> a</span><br><span class="line"><span class="title">parserReturn</span> x = <span class="type">P</span> $ \s -&gt; <span class="type">Empty</span> $ <span class="type">Ok</span> x s $ <span class="type">Msg</span> (statePos s) [] []</span><br><span class="line"></span><br><span class="line"><span class="title">parserBind</span> :: <span class="type">Parser</span> a -&gt; (a -&gt; <span class="type">Parser</span> b) -&gt; <span class="type">Parser</span> b</span><br><span class="line"><span class="title">parserBind</span> m k = <span class="type">P</span> $ \s -&gt; <span class="keyword">case</span> unP m s <span class="keyword">of</span></span><br><span class="line">    <span class="type">Consumed</span> (<span class="type">Ok</span> a s&#x27; _) -&gt; <span class="keyword">case</span> unP (k a) s&#x27; <span class="keyword">of</span></span><br><span class="line">                                <span class="type">Consumed</span> reply -&gt; <span class="type">Consumed</span> reply</span><br><span class="line">                                <span class="type">Empty</span> reply    -&gt; <span class="type">Consumed</span> reply</span><br><span class="line">    <span class="type">Empty</span> (<span class="type">Ok</span> a s&#x27; _)    -&gt; <span class="keyword">case</span> unP (k a) s&#x27; <span class="keyword">of</span></span><br><span class="line">                                <span class="type">Consumed</span> reply -&gt; <span class="type">Consumed</span> reply</span><br><span class="line">                                <span class="type">Empty</span> reply    -&gt; <span class="type">Empty</span> reply</span><br><span class="line">    <span class="type">Consumed</span> (<span class="type">Error</span> msg) -&gt; <span class="type">Consumed</span> $ <span class="type">Error</span> msg</span><br><span class="line">    <span class="type">Empty</span> (<span class="type">Error</span> msg)    -&gt; <span class="type">Empty</span> $ <span class="type">Error</span> msg</span><br><span class="line"></span><br><span class="line"><span class="title">parserZero</span> :: <span class="type">Parser</span> a</span><br><span class="line"><span class="title">parserZero</span> = <span class="type">P</span> $ \s -&gt; <span class="type">Empty</span> $ <span class="type">Error</span> $ <span class="type">Msg</span> (statePos s) [] []</span><br><span class="line"></span><br><span class="line"><span class="title">parserPlus</span> :: <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> a -&gt; <span class="type">Parser</span> a</span><br><span class="line"><span class="title">parserPlus</span> p q = <span class="type">P</span> $ \s -&gt; <span class="keyword">case</span> unP p s <span class="keyword">of</span></span><br><span class="line">    <span class="type">Empty</span> (<span class="type">Error</span> msg1) -&gt; <span class="keyword">case</span> unP q s <span class="keyword">of</span></span><br><span class="line">                            <span class="type">Empty</span> (<span class="type">Error</span> msg2) -&gt; mergeError msg1 msg2</span><br><span class="line">                            <span class="type">Empty</span> (<span class="type">Ok</span> a s&#x27; msg2) -&gt; mergeOk a s&#x27; msg1 msg2</span><br><span class="line">                            consumed -&gt; consumed</span><br><span class="line">    result             -&gt; result</span><br><span class="line">  <span class="keyword">where</span></span><br><span class="line">    mergeError msg1 msg2 = <span class="type">Empty</span> $ <span class="type">Error</span> $ merge msg1 msg2</span><br><span class="line">    mergeOk a s msg1 msg2 = <span class="type">Empty</span> $ <span class="type">Ok</span> a s $ merge msg1 msg2</span><br><span class="line">    merge (<span class="type">Msg</span> pos s exp1) (<span class="type">Msg</span> _ _ exp2) = <span class="type">Msg</span> pos s $ exp1 ++ exp2</span><br><span class="line"></span><br><span class="line"><span class="title">satisfy</span> :: (<span class="type">Char</span> -&gt; <span class="type">Bool</span>) -&gt; <span class="type">Parser</span> <span class="type">Char</span></span><br><span class="line"><span class="title">satisfy</span> test = <span class="type">P</span> $ \(<span class="type">State</span> s pos) -&gt; <span class="keyword">case</span> s <span class="keyword">of</span></span><br><span class="line">    (c:cs) | test c -&gt; <span class="keyword">let</span> pos&#x27; = nextPos pos c</span><br><span class="line">                           state&#x27; = <span class="type">State</span> cs pos&#x27;</span><br><span class="line">                       <span class="keyword">in</span> pos&#x27; `seq` <span class="type">Consumed</span> $ <span class="type">Ok</span> c state&#x27; $ <span class="type">Msg</span> pos [] []</span><br><span class="line">           | otherwise -&gt; <span class="type">Empty</span> $ <span class="type">Error</span> $ <span class="type">Msg</span> pos [c] []</span><br><span class="line">    []  -&gt; <span class="type">Empty</span> $ <span class="type">Error</span> $ <span class="type">Msg</span> pos <span class="string">&quot;end of input&quot;</span> []</span><br></pre></td></tr></table></figure>
+<p>可以发现，其实主要修改的只是<code>(&lt;|&gt;)</code>，当<code>p &lt;|&gt; q</code>中的<code>p</code>失败后，要将<code>p</code>的错误信息和<code>q</code>的信息进行合并，主要是对Frist集合进行合并。</p>
+<h2 id="labels">Labels</h2>
+<p><code>parsec</code>还提供了一种自定义错误信息的手段<code>label</code>函数，其中缀形式<code>(&lt;?&gt;)</code>。</p>
+<p><code>p &lt;?&gt; exp</code> 的含义：当<code>p</code>没有消耗符号，就将<code>exp</code>填充进First集合，表示当前期待的信息。</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(&lt;?&gt;) :: <span class="type">Parser</span> a -&gt; <span class="type">String</span> -&gt; <span class="type">Parser</span> a</span><br><span class="line"><span class="title">p</span> &lt;?&gt; exp = <span class="type">P</span> $ \s -&gt; <span class="keyword">case</span> unP p s <span class="keyword">of</span></span><br><span class="line">    <span class="type">Empty</span> (<span class="type">Error</span> msg)   -&gt; <span class="type">Empty</span> $ <span class="type">Error</span> $ expect msg exp</span><br><span class="line">    <span class="type">Empty</span> (<span class="type">Ok</span> a s&#x27; msg) -&gt; <span class="type">Empty</span> $ <span class="type">Ok</span> a s&#x27; $ expect msg exp</span><br><span class="line">    other               -&gt; other</span><br><span class="line">  <span class="keyword">where</span></span><br><span class="line">    expect (<span class="type">Msg</span> pos s _) exp = <span class="type">Msg</span> pos s [exp]</span><br></pre></td></tr></table></figure>
+<p>有了这个函数，我们可以非常方便的定制错误信息，如下：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">digit</span> = satisfy isDigit &lt;?&gt; <span class="string">&quot;digit&quot;</span></span><br><span class="line"><span class="title">letter</span> = satisfy isAlpha &lt;?&gt; <span class="string">&quot;letter&quot;</span></span><br><span class="line"><span class="title">char</span> c = satisfy (==c) &lt;?&gt; show c</span><br></pre></td></tr></table></figure>
+<h1 id="真实的parsec">真实的<code>Parsec</code></h1>
+<p>以上的所有内容，都来自论文<a target="_blank" rel="noopener" href="https://www.microsoft.com/en-us/research/publication/parsec-direct-style-monadic-parser-combinators-for-the-real-world/">《Parsec: Direct Style Monadic Parser Combinators For The Real World》</a>。根据论文我实现了一个玩具版的Parser。</p>
+<p>真实的<a target="_blank" rel="noopener" href="https://hackage.haskell.org/package/parsec-3.1.14.0"><code>parsec</code></a>是怎么实现的，有什么不一样的细节？主要区别如下：</p>
+<ul>
+<li>使用CPS：从<code>parsec 3.0</code>以后，<code>ParsecT</code>就完全使用CPS重写了，主要原因是防止递归深度太深造成内存泄漏，而CPS相当于手动写作尾递归的形式，编译器会将其优化为迭代。</li>
+<li>更复杂的错误信息处理：真实的报错肯定没有上文中那么简单，<code>Text.Parsec.Error</code>里面全是对于错误信息的处理函数，使得错误信息更加友好、便于阅读修改。</li>
+<li>允许用户自定义State藏在context中：在一开始的monadic parser vs applicative parser一节中，提到过monadic parser理论上可以处理一切CSG，但是迄今为止文章甚至将<code>ParsecT</code>限制为LL(1)，还需要使用<code>try</code>才能拓展为LL(<span class="math inline">\(\infty\)</span>)，这之间的巨大鸿沟在那里呢？就在于状态，parser相当于一个state monad，迄今为止我们只是将代处理字符串和一些辅助信息当作state，其实我们可以将任意的信息藏在context中——例如，维护一个<code>Map String Val</code>，这样就可以实现带有“变量定义”的表达式计算。</li>
+<li>提供丰富的parse工具：除了简单的字符parser combinator，<code>parsec</code>还提供了
+<ul>
+<li><code>Text.Parsec.Expr</code>：专门针对表达式的parse，非常值的学习，下一片文章再来讨论；</li>
+<li><code>Text.Parsec.Perm</code>：允许parse目标序列的某个“排列”，不知道怎么实现的，也不知道有什么用。。。</li>
+<li><code>Text.Parsec.Token</code>：允许根据定义的<code>Language</code>规则，提供一套特化的parser combinator。</li>
+</ul></li>
+</ul>
+<p>说起来貌似很复杂，其实我们实现的“玩具”基本已经具备全部功能，CPS可以只当作为了性能上的提升的一种实现，功能上只是没有提供用户自定义的State（其实实现起来巨简单，直接塞进State里面，提供<code>get</code>、<code>set</code>接口即可）。剩下的都是基于基本功能开发的工具，下一篇文章将讨论如何使用<code>Parsec</code>来parse表达式。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/parser/" rel="tag"><i class="fa fa-tag"></i> parser</a>
+              <a href="/tags/Parsec/" rel="tag"><i class="fa fa-tag"></i> Parsec</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/07/13/Leetcode-458/" rel="prev" title="Leetcode 458">
+                  <i class="fa fa-chevron-left"></i> Leetcode 458
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhuyk6</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{&quot;enable&quot;:true,&quot;theme&quot;:&quot;forest&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mermaid@8.9.3&#x2F;dist&#x2F;mermaid.min.js&quot;,&quot;integrity&quot;:&quot;sha256-OyJHvRcZHaRR6Ig73ppxF4QXk8HzvfgTprRWkulCkfY&#x3D;&quot;}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;,&quot;integrity&quot;:&quot;sha256-ncNI9OXOS5Ek4tzVYiOMmN&#x2F;KKCPZ6V0Cpv2P&#x2F;zHntiA&#x3D;&quot;}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
