@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CNiconne:300,300italic,400,400italic,700,700italic%7CFira+Code:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhuyk6.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Gemini&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
+<meta name="description" content="本文借助 Codewars 一道题目 Sure, but can you SKI? (I) 来简单学习 SKI。 参考 wiki。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SKI Combinator Calculus">
+<meta property="og:url" content="https://zhuyk6.github.io/2021/08/02/SKI-Combinator-Calculus/index.html">
+<meta property="og:site_name" content="Zhuyk6&#39;s Blog">
+<meta property="og:description" content="本文借助 Codewars 一道题目 Sure, but can you SKI? (I) 来简单学习 SKI。 参考 wiki。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-08-01T16:12:57.000Z">
+<meta property="article:modified_time" content="2021-08-01T17:11:47.684Z">
+<meta property="article:author" content="zhuyk6">
+<meta property="article:tag" content="SKI">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zhuyk6.github.io/2021/08/02/SKI-Combinator-Calculus/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhuyk6.github.io&#x2F;2021&#x2F;08&#x2F;02&#x2F;SKI-Combinator-Calculus&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;08&#x2F;02&#x2F;SKI-Combinator-Calculus&#x2F;&quot;,&quot;title&quot;:&quot;SKI Combinator Calculus&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>SKI Combinator Calculus | Zhuyk6's Blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Zhuyk6's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+        <li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ski"><span class="nav-number">1.</span> <span class="nav-text">SKI</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8Elambda%E6%BC%94%E7%AE%97%E8%BD%AC%E6%8D%A2"><span class="nav-number">2.</span> <span class="nav-text">与lambda演算转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ski-%E7%9A%84%E6%84%8F%E4%B9%89%E4%B8%8E%E4%BB%B7%E5%80%BC"><span class="nav-number">3.</span> <span class="nav-text">SKI 的意义与价值</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhuyk6</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuyk6" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuyk6" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhuyk6@foxmail.com" title="E-Mail → mailto:zhuyk6@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zhuyk6.github.io/2021/08/02/SKI-Combinator-Calculus/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhuyk6">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhuyk6's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SKI Combinator Calculus
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-08-02 00:12:57 / 修改时间：01:11:47" itemprop="dateCreated datePublished" datetime="2021-08-02T00:12:57+08:00">2021-08-02</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>本文借助 Codewars 一道题目 <a target="_blank" rel="noopener" href="https://www.codewars.com/kata/5a02dccf32b8b988120000da/haskell">Sure, but can you SKI? (I)</a> 来简单学习 SKI。</p>
+<p>参考 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/SKI_combinator_calculus">wiki</a>。</p>
+<span id="more"></span>
+<h1 id="ski">SKI</h1>
+<p>SKI 组合子计算 是一个计算系统，和lambda演算一样，是图灵完备的。</p>
+<p>SKI 顾名思义，由三种基本组合子构成，计算规则如下：</p>
+<ul>
+<li><code>I x = x</code></li>
+<li><code>K x y = x</code></li>
+<li><code>S x y z = x z (y z)</code></li>
+</ul>
+<p>很明显，<code>I</code>就是<code>id :: a -&gt; a</code>，<code>K</code>就是<code>const :: a -&gt; b -&gt; a</code>，只有<code>S</code>看似复杂一些，<code>S</code>用来实现“函数应用”。</p>
+<blockquote>
+<p>需要指出，<code>S K _ x = K x (_ x) = x = I x</code>，所以可以使用 <code>SKK</code> 来代替 <code>I</code>，可见 <code>I</code> 不是必须的，只是一个语法糖，所以SKI也称作SK演算。</p>
+</blockquote>
+<h1 id="与lambda演算转换">与lambda演算转换</h1>
+<p>SKI 演算只使用这三种组合子，所以是一种组合子风格的计算系统。将lambda演算转换为SKI，关键就是将lambda演算写成point-free风格，消去参数。</p>
+<p>显然，这种转换并不是唯一的，或许有必要追求所谓最短转换，不过在此仅介绍一种通用的转换方法：</p>
+<ul>
+<li><code>\x -&gt; x</code>：写作<code>I</code></li>
+<li><code>\x -&gt; A</code>：其中<code>A</code>不含<code>x</code>，直接写作<code>K A</code>;</li>
+<li><code>\x -&gt; A x</code>：其中<code>A</code>不含<code>x</code>，直接写作<code>A</code>;</li>
+<li><code>\x -&gt; A B</code>：转化为<code>\x -&gt; S (\x -&gt; A) (\x -&gt; B) x</code>。</li>
+</ul>
+<p>按照这种通用思路，可以将任意lambda演算转换为SKI，不过这种方法的转化可能是指数增长的，非常可怕。</p>
+<p>下面举一些例子来说明：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">rev</span> :: a -&gt; (a -&gt; b) -&gt; b</span><br><span class="line"><span class="comment">-- \a f -&gt; f a </span></span><br><span class="line"><span class="comment">-- \a f -&gt; f (K a f)</span></span><br><span class="line"><span class="comment">-- \a f -&gt; (I f) (K a f)</span></span><br><span class="line"><span class="comment">-- \a f -&gt; S I (K a) f</span></span><br><span class="line"><span class="comment">-- \a -&gt; S I (K a)</span></span><br><span class="line"><span class="comment">-- \a -&gt; (S I) (K a)</span></span><br><span class="line"><span class="comment">-- \a -&gt; (K (S I) a) (K a)</span></span><br><span class="line"><span class="comment">-- \a -&gt; S (K (S I)) K a</span></span><br><span class="line"><span class="title">rev</span> = s (k (s i)) k</span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">comp</span> :: <span class="type">SKI</span> ((b -&gt; c) -&gt; (a -&gt; b) -&gt; (a -&gt; c))</span><br><span class="line"><span class="comment">-- \g f -&gt; g . f </span></span><br><span class="line"><span class="comment">-- \g f x -&gt; g (f x)</span></span><br><span class="line"><span class="comment">-- \g f x -&gt; (K g x) (f x)</span></span><br><span class="line"><span class="comment">-- \g f x -&gt; S (K g) f x </span></span><br><span class="line"><span class="comment">-- \g f -&gt; S (K g) f</span></span><br><span class="line"><span class="comment">-- \g -&gt; S (K g)</span></span><br><span class="line"><span class="comment">-- \g -&gt; (K S g) (K g)</span></span><br><span class="line"><span class="comment">-- \g -&gt; S (K S) K g</span></span><br><span class="line"><span class="comment">-- S (K S) K</span></span><br><span class="line"><span class="title">comp</span> = <span class="type">S</span> (<span class="type">K</span> <span class="type">S</span>) <span class="type">K</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">flip&#x27;</span> :: <span class="type">SKI</span> ((a -&gt; b -&gt; c) -&gt; (b -&gt; a -&gt; c))</span><br><span class="line"><span class="comment">-- -- \f -&gt; flip f</span></span><br><span class="line"><span class="comment">-- -- \f b a -&gt; f a b</span></span><br><span class="line"><span class="comment">-- -- \f b a -&gt; (f a) b </span></span><br><span class="line"><span class="comment">-- -- \f b a -&gt; (f a) (K b a)</span></span><br><span class="line"><span class="comment">-- -- \f b a -&gt; S f (K b) a </span></span><br><span class="line"><span class="comment">-- -- \f b -&gt; S f (K b)</span></span><br><span class="line"><span class="comment">-- -- \f b -&gt; (K (S f) b) (K b)</span></span><br><span class="line"><span class="comment">-- -- \f b -&gt; S (K (S f)) K b</span></span><br><span class="line"><span class="comment">-- -- \f -&gt; S (K (S f)) K</span></span><br><span class="line"><span class="comment">-- -- \f -&gt; ((S . K . S) f) (K K f)</span></span><br><span class="line"><span class="comment">-- -- \f -&gt; S (S . K . S) (K K) f </span></span><br><span class="line"><span class="comment">-- -- S (S . K . S) (K K)</span></span><br><span class="line"><span class="comment">-- flip&#x27; = S (comp S (comp K S)) (K K)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- \f b a -&gt; f a b </span></span><br><span class="line"><span class="comment">-- \f b a -&gt; (f a) (K b a)</span></span><br><span class="line"><span class="comment">-- \f b -&gt; S f (K b)</span></span><br><span class="line"><span class="comment">-- \f -&gt; (S f) . K </span></span><br><span class="line"><span class="comment">-- \f -&gt; comp (S f) K</span></span><br><span class="line"><span class="comment">-- \f -&gt; (comp comp S f) (K K f)</span></span><br><span class="line"><span class="comment">-- S (comp comp S) (K K)</span></span><br><span class="line"><span class="comment">-- flip&#x27; = S (comp comp S) (K K)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- \f b a -&gt; f a b </span></span><br><span class="line"><span class="comment">-- \f b a -&gt; (f a) (K b a)</span></span><br><span class="line"><span class="comment">-- \f b -&gt; S f (K b)</span></span><br><span class="line"><span class="comment">-- \f b -&gt; comp (S f) K b</span></span><br><span class="line"><span class="comment">-- \f -&gt; comp (S f) K</span></span><br><span class="line"><span class="comment">-- \f -&gt; (K comp f) (S f) (K K f)</span></span><br><span class="line"><span class="comment">-- \f -&gt; S (K comp) S f (K K f)</span></span><br><span class="line"><span class="comment">-- S (S (K comp) S) (K K)</span></span><br><span class="line"><span class="title">flip&#x27;</span> = <span class="type">S</span> (<span class="type">S</span> (<span class="type">K</span> comp) <span class="type">S</span>) (<span class="type">K</span> <span class="type">K</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>从<code>flip</code>就可以看出来，同一个lambda表达式可以有非常多等价的SKI表达，不同的抽象方法可能得到长得完全不一样的表达式，这或许就是优化空间，笑</p>
+</blockquote>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">rotr</span> :: <span class="type">SKI</span> (a -&gt; (c -&gt; a -&gt; b) -&gt; c -&gt; b)</span><br><span class="line"><span class="comment">-- \a f c -&gt; f c a </span></span><br><span class="line"><span class="comment">-- \a f c -&gt; (f c) (K a c)</span></span><br><span class="line"><span class="comment">-- \a f c -&gt; S f (K a) c </span></span><br><span class="line"><span class="comment">-- \a f -&gt; S f (K a)</span></span><br><span class="line"><span class="comment">-- \a f -&gt; (S f) (K (K a) f)</span></span><br><span class="line"><span class="comment">-- \a f -&gt; S S (K (K a)) f </span></span><br><span class="line"><span class="comment">-- \a -&gt; S S (K (K a))</span></span><br><span class="line"><span class="comment">-- \a -&gt; (K (S S) a) ((K . K) a)</span></span><br><span class="line"><span class="comment">-- S (K (S S)) (K . K)</span></span><br><span class="line"><span class="comment">-- rotr = S &lt;@&gt; (K &lt;@&gt; (S &lt;@&gt; S)) &lt;@&gt; (comp &lt;@&gt; K &lt;@&gt; K)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- \a f c -&gt; f c a </span></span><br><span class="line"><span class="comment">-- \a f c -&gt; flip&#x27; f a c</span></span><br><span class="line"><span class="comment">-- \a f -&gt; flip&#x27; f a</span></span><br><span class="line"><span class="comment">-- \a f -&gt; flip&#x27; flip&#x27; a f</span></span><br><span class="line"><span class="comment">-- flip&#x27; flip&#x27;</span></span><br><span class="line"><span class="title">rotr</span> = flip&#x27; flip&#x27;</span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">rotv</span> :: <span class="type">SKI</span> (a -&gt; b -&gt; (a -&gt; b -&gt; c) -&gt; c)</span><br><span class="line"><span class="comment">-- \a b f -&gt; f a b </span></span><br><span class="line"><span class="comment">-- \a b f -&gt; (f a) (K b f)</span></span><br><span class="line"><span class="comment">-- \a b f -&gt; (rev a f) (K b f)</span></span><br><span class="line"><span class="comment">-- \a b f -&gt; S (rev a) (K b) f </span></span><br><span class="line"><span class="comment">-- \a b -&gt; S (rev a) (K b) </span></span><br><span class="line"><span class="comment">-- \a b -&gt; (K (S (rev a)) b) (K b)</span></span><br><span class="line"><span class="comment">-- \a -&gt; S (K (S (rev a))) K</span></span><br><span class="line"><span class="comment">-- \a -&gt; ((S . K . S . rev) a) (K K a)</span></span><br><span class="line"><span class="comment">-- S (S . K . S . rev) (K K)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- \a b f -&gt; f a b </span></span><br><span class="line"><span class="comment">-- \a b f -&gt; rev a f b</span></span><br><span class="line"><span class="comment">-- \a b f -&gt; flip&#x27; (rev a) b f </span></span><br><span class="line"><span class="comment">-- \a -&gt; flip&#x27; (rev a)</span></span><br><span class="line"><span class="comment">-- comp flip&#x27; rev</span></span><br><span class="line"><span class="title">rotv</span> = comp flip&#x27; rev </span><br></pre></td></tr></table></figure>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">join</span> :: <span class="type">SKI</span> ((a -&gt; a -&gt; b) -&gt; a -&gt; b)</span><br><span class="line"><span class="comment">-- join = Ap (Ap flip&#x27; S) I</span></span><br><span class="line"><span class="comment">-- \f a -&gt; f a a</span></span><br><span class="line"><span class="comment">-- \f a -&gt; (f a) (I a)</span></span><br><span class="line"><span class="comment">-- \f -&gt; S f I </span></span><br><span class="line"><span class="comment">-- \f -&gt; flip&#x27; S I f</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- \f a -&gt; f a a </span></span><br><span class="line"><span class="comment">-- \f a -&gt; (f a) (S K f a)</span></span><br><span class="line"><span class="comment">-- \f -&gt; S f (S K f)</span></span><br><span class="line"><span class="comment">-- S S (S K)</span></span><br><span class="line"><span class="title">join</span> = <span class="type">S</span>  <span class="type">S</span>  (<span class="type">S</span>  <span class="type">K</span>)</span><br></pre></td></tr></table></figure>
+<p>上面几个例子都是用于控制函数参数位置的组合子，使用他们可以更方便的控制更复杂的结构。</p>
+<p>下面以<code>Bool</code>类型为例子，说明使用SKI实现lambda演算版本的布尔类型。</p>
+<p>首先介绍Church encoding版本的<code>Bool</code>类型：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">type</span> <span class="type">Bool&#x27;</span> a = a -&gt; a -&gt; a</span></span><br><span class="line"></span><br><span class="line"><span class="title">true</span> :: <span class="type">Bool&#x27;</span> a</span><br><span class="line"><span class="title">true</span> a b = a</span><br><span class="line"></span><br><span class="line"><span class="title">false</span> :: <span class="type">Bool&#x27;</span> a</span><br><span class="line"><span class="title">false</span> a b = b</span><br></pre></td></tr></table></figure>
+<p>可以看出，Church encoding版本的<code>Bool</code>类型本质上是位置选择函数，选择第一个位置还是第二个，所以我们可以借助上面实现的各种参数位置的控制函数来实现下面的函数。</p>
+<p>当然这是因为任何一个二元类型<code>A</code>的计算<code>A -&gt; r</code>都同构于<code>r -&gt; r -&gt; r</code>，这放到同构和Church encoding专题再详细讨论。</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">true</span> :: <span class="type">SKI</span> (<span class="type">Bool&#x27;</span> a)</span><br><span class="line"><span class="title">true</span> = <span class="type">K</span></span><br><span class="line"><span class="comment">-- \a b -&gt; a</span></span><br><span class="line"></span><br><span class="line"><span class="title">false</span> :: <span class="type">SKI</span> (<span class="type">Bool&#x27;</span> a)</span><br><span class="line"><span class="title">false</span> = <span class="type">K</span> <span class="type">I</span></span><br><span class="line"><span class="comment">-- \a b -&gt; b</span></span><br><span class="line"></span><br><span class="line"><span class="title">not&#x27;</span> :: <span class="type">SKI</span> (<span class="type">Bool&#x27;</span> a -&gt; <span class="type">Bool&#x27;</span> a)</span><br><span class="line"><span class="title">not&#x27;</span> = flip&#x27;</span><br><span class="line"><span class="comment">-- \b -&gt; flip b</span></span><br><span class="line"></span><br><span class="line"><span class="title">and&#x27;</span> :: <span class="type">SKI</span> (<span class="type">Bool&#x27;</span> (<span class="type">Bool&#x27;</span> a) -&gt; <span class="type">Bool&#x27;</span> a -&gt; <span class="type">Bool&#x27;</span> a)</span><br><span class="line"><span class="comment">-- and&#x27; = Ap (Ap S S) (Ap K (Ap K false))</span></span><br><span class="line"><span class="comment">-- \x y -&gt; x y F</span></span><br><span class="line"><span class="comment">-- \x y -&gt; (x y) (K F y)</span></span><br><span class="line"><span class="comment">-- \x -&gt; S x (K F)</span></span><br><span class="line"><span class="comment">-- \x -&gt; (S x) (K (K F) x)</span></span><br><span class="line"><span class="comment">-- S S (K (K F))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- \x y -&gt; x y F </span></span><br><span class="line"><span class="comment">-- \x y -&gt; rotr F x y</span></span><br><span class="line"><span class="comment">-- rotr F</span></span><br><span class="line"><span class="title">and&#x27;</span> = rotr false</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="title">or&#x27;</span> :: <span class="type">SKI</span> (<span class="type">Bool&#x27;</span> (<span class="type">Bool&#x27;</span> a) -&gt; <span class="type">Bool&#x27;</span> a -&gt; <span class="type">Bool&#x27;</span> a)</span><br><span class="line"><span class="comment">-- or&#x27; = Ap (Ap S I) (Ap K true)</span></span><br><span class="line"><span class="comment">-- \x y -&gt; x T y</span></span><br><span class="line"><span class="comment">-- \x -&gt; x T</span></span><br><span class="line"><span class="comment">-- \x -&gt; (I x) (K T x)</span></span><br><span class="line"><span class="comment">-- S I (K T)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- \x y -&gt; x T y </span></span><br><span class="line"><span class="comment">-- \x y -&gt; rev T x y</span></span><br><span class="line"><span class="comment">-- rev T </span></span><br><span class="line"><span class="title">or&#x27;</span> = rev true</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="title">xor&#x27;</span> :: <span class="type">SKI</span> (<span class="type">Bool&#x27;</span> (<span class="type">Bool&#x27;</span> a -&gt; <span class="type">Bool&#x27;</span> a) -&gt; <span class="type">Bool&#x27;</span> a -&gt; <span class="type">Bool&#x27;</span> a)</span><br><span class="line"><span class="comment">-- xor&#x27; = Ap (Ap S x) y</span></span><br><span class="line"><span class="comment">--     where </span></span><br><span class="line"><span class="comment">--         comp&#x27; = Ap flip&#x27; comp</span></span><br><span class="line"><span class="comment">--         x = Ap (Ap comp S) (Ap comp&#x27; not&#x27;)</span></span><br><span class="line"><span class="comment">--         y = Ap K I</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- \x y -&gt; x (not y) y </span></span><br><span class="line"><span class="comment">-- \x y -&gt; (comp x not) y (I y)</span></span><br><span class="line"><span class="comment">-- \x -&gt; S (comp x not) I</span></span><br><span class="line"><span class="comment">-- \x -&gt; (comp S (\x -&gt; comp x not)) x I</span></span><br><span class="line"><span class="comment">-- \x -&gt; (comp S (comp&#x27; not)) x (K I x)</span></span><br><span class="line"><span class="comment">-- S (comp S (comp&#x27; not)) (K I)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- \x y -&gt; x (not y) y</span></span><br><span class="line"><span class="comment">-- \x y -&gt; comp x not y y</span></span><br><span class="line"><span class="comment">-- \x -&gt; join (comp x not)</span></span><br><span class="line"><span class="comment">-- \x -&gt; join (flip&#x27; comp not x)</span></span><br><span class="line"><span class="comment">-- comp join (flip&#x27; comp not)</span></span><br><span class="line"><span class="comment">-- xor&#x27; = comp  join  (flip&#x27;  comp  not&#x27;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- \x -&gt; x not I</span></span><br><span class="line"><span class="comment">-- \x -&gt; rev I (x not)</span></span><br><span class="line"><span class="comment">-- \x -&gt; rev I (rev not x)</span></span><br><span class="line"><span class="comment">-- comp (rev I) (rev not)</span></span><br><span class="line"><span class="title">xor&#x27;</span> = comp (rev  <span class="type">I</span>)  (rev not&#x27;)</span><br></pre></td></tr></table></figure>
+<p>比较有意思的是，根据不同层次的抽象，写出来的代码复杂度千差万别。</p>
+<p>如果只是简单的将<code>true</code>和<code>false</code>当作两个位置选择函数，然后每次将完整的参数全部带入然后化简，比如<code>and = \x y a b -&gt; x (y a b) b</code>，那就太复杂了，实际上借助我们对布尔运算的先验知识，可以很容易写出下面的等价描述：</p>
+<ul>
+<li><code>and = \x y -&gt; x y F</code></li>
+<li><code>or = \x y -&gt; x T y</code></li>
+<li><code>xor = \x y -&gt; x (not y) y</code></li>
+</ul>
+<p>有趣的是，还可以借助先验知识继续化简：</p>
+<ul>
+<li><code>and = \x -&gt; x I (K F)</code></li>
+<li><code>or = \x -&gt; x T I</code></li>
+<li><code>xor = \x -&gt; x not I</code></li>
+</ul>
+<p>而这两者之间的互相转换，仅仅只有SKI的信息应该是无法完成的，换言之，这二者的等价依赖<code>Bool'</code>这个类型。（或许我太菜了没看出来）</p>
+<h1 id="ski-的意义与价值">SKI 的意义与价值</h1>
+<p>不懂，或许未来就懂了，再回来填坑。</p>
+<p>目前来看，SKI是一个足够小的规则集，是图灵完备，问题是这玩意儿和lambda演算比有啥优势吗，人家lambda演算也只有两条基本规则阿，而且比SKI方便表达多了。或许主要魅力在于“组合子”？point-free？不懂，有屁用阿……</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/SKI/" rel="tag"><i class="fa fa-tag"></i> SKI</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/07/31/Category-Theory/" rel="prev" title="Category Theory">
+                  <i class="fa fa-chevron-left"></i> Category Theory
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhuyk6</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{&quot;enable&quot;:true,&quot;theme&quot;:&quot;forest&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mermaid@8.9.3&#x2F;dist&#x2F;mermaid.min.js&quot;,&quot;integrity&quot;:&quot;sha256-OyJHvRcZHaRR6Ig73ppxF4QXk8HzvfgTprRWkulCkfY&#x3D;&quot;}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;,&quot;integrity&quot;:&quot;sha256-ncNI9OXOS5Ek4tzVYiOMmN&#x2F;KKCPZ6V0Cpv2P&#x2F;zHntiA&#x3D;&quot;}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
