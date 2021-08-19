@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CNiconne:300,300italic,400,400italic,700,700italic%7CFira+Code:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhuyk6.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Gemini&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
+<meta name="description" content="本文旨在用最简单、最直观的逻辑、实现来讲清楚Red-Black tree的理论和实现。 参考资料：  wiki Brilliant wiki Abhiroop Sarkar&#39;s Blog Matt Might&#39;s Blog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Red Black Tree">
+<meta property="og:url" content="https://zhuyk6.github.io/2021/08/19/Red-Black-Tree/index.html">
+<meta property="og:site_name" content="Zhuyk6&#39;s Blog">
+<meta property="og:description" content="本文旨在用最简单、最直观的逻辑、实现来讲清楚Red-Black tree的理论和实现。 参考资料：  wiki Brilliant wiki Abhiroop Sarkar&#39;s Blog Matt Might&#39;s Blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhuyk6.github.io/2021/08/19/Red-Black-Tree/Red-black_tree_example.svg.png">
+<meta property="og:image" content="https://zhuyk6.github.io/2021/08/19/Red-Black-Tree/befor_merge.png">
+<meta property="og:image" content="https://zhuyk6.github.io/2021/08/19/Red-Black-Tree/after_merge.png">
+<meta property="og:image" content="https://zhuyk6.github.io/2021/08/19/Red-Black-Tree/Red-black_tree_example_(B-tree_analogy).svg.png">
+<meta property="og:image" content="https://zhuyk6.github.io/2021/08/19/Red-Black-Tree/before_bubble.png">
+<meta property="og:image" content="https://zhuyk6.github.io/2021/08/19/Red-Black-Tree/after_bubble.png">
+<meta property="og:image" content="https://zhuyk6.github.io/2021/08/19/Red-Black-Tree/balance_3.jpeg">
+<meta property="article:published_time" content="2021-08-19T02:29:43.000Z">
+<meta property="article:modified_time" content="2021-08-19T05:27:03.339Z">
+<meta property="article:author" content="zhuyk6">
+<meta property="article:tag" content="RB tree">
+<meta property="article:tag" content="Balanced tree">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhuyk6.github.io/2021/08/19/Red-Black-Tree/Red-black_tree_example.svg.png">
+
+
+<link rel="canonical" href="https://zhuyk6.github.io/2021/08/19/Red-Black-Tree/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhuyk6.github.io&#x2F;2021&#x2F;08&#x2F;19&#x2F;Red-Black-Tree&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;08&#x2F;19&#x2F;Red-Black-Tree&#x2F;&quot;,&quot;title&quot;:&quot;Red Black Tree&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>Red Black Tree | Zhuyk6's Blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Zhuyk6's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+        <li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#red-black-tree-height"><span class="nav-number">2.</span> <span class="nav-text">Red-Black Tree Height</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#insertion"><span class="nav-number">3.</span> <span class="nav-text">Insertion</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#deletion"><span class="nav-number">4.</span> <span class="nav-text">Deletion</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#code"><span class="nav-number">5.</span> <span class="nav-text">Code</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#conclusion"><span class="nav-number">6.</span> <span class="nav-text">Conclusion</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhuyk6</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuyk6" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuyk6" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhuyk6@foxmail.com" title="E-Mail → mailto:zhuyk6@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zhuyk6.github.io/2021/08/19/Red-Black-Tree/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhuyk6">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhuyk6's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Red Black Tree
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-08-19 10:29:43 / 修改时间：13:27:03" itemprop="dateCreated datePublished" datetime="2021-08-19T10:29:43+08:00">2021-08-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Data-Structures/" itemprop="url" rel="index"><span itemprop="name">Data Structures</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>本文旨在用最简单、最直观的逻辑、实现来讲清楚Red-Black tree的理论和实现。</p>
+<p>参考资料：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Red%E2%80%93black_tree">wiki</a></li>
+<li><a target="_blank" rel="noopener" href="https://brilliant.org/wiki/red-black-tree/">Brilliant wiki</a></li>
+<li><a target="_blank" rel="noopener" href="https://abhiroop.github.io/Haskell-Red-Black-Tree/?utm_source=pocket_mylist">Abhiroop Sarkar's Blog</a></li>
+<li><a target="_blank" rel="noopener" href="https://matt.might.net/articles/red-black-delete/?utm_source=pocket_mylist">Matt Might's Blog</a></li>
+</ul>
+<span id="more"></span>
+<h1 id="overview">Overview</h1>
+<p>Red-Black tree （RB-tree）顾名思义，就是在Binary Search Tree（BST）的基础上，每个内部数据节点附带一个“颜色”信息，颜色只能是“Red”红色或者“Black”黑色，并且满足下面三条性质：</p>
+<ol type="1">
+<li>root和leaf节点必须是Black；</li>
+<li>Red节点的“<strong>父亲</strong>”必须是Black；</li>
+<li>对于任意一个节点，从该节点出发到其所有leaf的黑色路径长度相等。</li>
+</ol>
+<figure>
+<img src="Red-black_tree_example.svg.png" alt="RB-tree example" /><figcaption>RB-tree example</figcaption>
+</figure>
+<p>仔细品品这三条性质：</p>
+<ol type="1">
+<li>没什么好说的，算是一种规整化；</li>
+<li>任意父子不能同时为红色，也就是说Red不能相邻；</li>
+<li>有很多种等价描述，也可以描述为：
+<ul>
+<li>每个Leaf的Black-Depth（从root到该节点的黑色节点数目）相等；</li>
+<li>对于每个节点，其两个儿子的Black-Height相等；</li>
+</ul></li>
+</ol>
+<p>表面上看上去，会觉得RB-tree的定义十分“不自然”，为什么要定义貌似屁用没有的“颜色”？颜色的实际意义是什么？2、3的约束为什么能保证树高？没有红色节点行不行？</p>
+<h1 id="red-black-tree-height">Red-Black Tree Height</h1>
+<p>对于平衡树，关键就是对于树高的控制，RB-tree是怎么控制树高的，关键就是性质2、3，下面证明：</p>
+<p><strong>RB-tree和4阶B-tree是同构的</strong>。</p>
+<div class="note info"><p>4阶B-tree每个内部节点存储1..3个值 并且 拥有2..4个儿子</p>
+</div>
+<p>下面说明RB-tree可以通过压缩Red节点形成同构的B-tree：</p>
+<ul>
+<li>如果一个Black节点没有Red儿子，保持不变，拥有2个儿子；</li>
+<li>如果Black节点有一个Red儿子，将Red吸收，并将其儿子作为自己的儿子，拥有3个儿子；</li>
+<li>如果Black节点有2个Red儿子，将Red吸收，并将其儿子作为自己的儿子，拥有4个儿子。</li>
+</ul>
+<p>以下图为例：</p>
+<figure>
+<img src="befor_merge.png" alt="Before Merge" /><figcaption>Before Merge</figcaption>
+</figure>
+<p>将Red节点merge后：</p>
+<figure>
+<img src="after_merge.png" alt="After Merge" /><figcaption>After Merge</figcaption>
+</figure>
+<p>下图是上一节中example的等价B-tree。</p>
+<figure>
+<img src="Red-black_tree_example_(B-tree_analogy).svg.png" alt="RB-tree and B-tree" /><figcaption>RB-tree and B-tree</figcaption>
+</figure>
+<p>其实这也就是RB-tree的本质，就是4阶B-tree，只不过用等价的2叉树方便编程罢了，<del>此文终结。</del> 不过该证明的还是要证明，本文适用于没学过B-tree的小白。</p>
+<p>下面证明 <span class="math inline">\(n\)</span> 个节点（不含Leaf）的RB-tree的树高 <span class="math inline">\(h\leq 2 \log_2(n+1)\)</span>：</p>
+<p>首先设RB-tree的等价B-tree树高为 <span class="math inline">\(h_1\)</span>，根据性质2，很容易得到</p>
+<p><span class="math display">\[h_1\geq h / 2\]</span></p>
+<p>merge前后Leaf一定被保留，<span class="math inline">\(n\)</span> 节点的BST拥有 <span class="math inline">\(n+1\)</span> 个Leaf，根据性质3，merge后得到的树一定高度平衡（所有Leaf拥有相同的深度），所以</p>
+<p><span class="math display">\[\begin{align} n+1 &amp; \geq 2^{h_1} \\
+\log_2(n+1) &amp; \geq h_1 \geq h / 2 \\
+h &amp; \leq 2 \log_2(n+1)
+\end{align}\]</span></p>
+<h1 id="insertion">Insertion</h1>
+<p>和一般的BST插入相同，在Leaf位置插入一个Red节点，然后调整平衡。</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">insert</span> :: (<span class="type">Ord</span> a) =&gt; a -&gt; <span class="type">RBTree</span> a -&gt; <span class="type">RBTree</span> a</span><br><span class="line"><span class="title">insert</span> v t = blacken $ ins t</span><br><span class="line">    <span class="keyword">where</span>   ins <span class="type">E</span> = <span class="type">T</span> <span class="type">R</span> <span class="type">E</span> v <span class="type">E</span></span><br><span class="line">            ins (<span class="type">T</span> c l x r) = <span class="keyword">case</span> compare v x <span class="keyword">of</span></span><br><span class="line">                <span class="type">LT</span> -&gt; balance c (ins l) x r</span><br><span class="line">                <span class="type">EQ</span> -&gt; <span class="type">T</span> c l x r </span><br><span class="line">                <span class="type">GT</span> -&gt; balance c l x (ins r)</span><br></pre></td></tr></table></figure>
+<p>为什么插入Red节点？是为了不破坏性质3，这样插入只可能破坏性质2。</p>
+<p>对于性质2的破坏（出现连续Red），显然有且仅有4种情况：左左、左右、右左、右右。</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">Color</span> = <span class="type">R</span> | <span class="type">B</span> <span class="keyword">deriving</span> (<span class="type">Show</span>, <span class="type">Enum</span>)</span></span><br><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">RBTree</span> a = <span class="type">E</span> | <span class="type">T</span> <span class="type">Color</span> (<span class="type">RBTree</span> <span class="title">a</span>) a (<span class="type">RBTree</span> <span class="title">a</span>)</span></span><br><span class="line"></span><br><span class="line"><span class="title">balance</span> :: <span class="type">Color</span> -&gt; <span class="type">RBTree</span> a -&gt; a -&gt; <span class="type">RBTree</span> a -&gt; <span class="type">RBTree</span> a</span><br><span class="line"></span><br><span class="line"><span class="title">balance</span> <span class="type">B</span> (<span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">R</span> a x b) y c) z d = <span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"><span class="title">balance</span> <span class="type">B</span> (<span class="type">T</span> <span class="type">R</span> a x (<span class="type">T</span> <span class="type">R</span> b y c)) z d = <span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"><span class="title">balance</span> <span class="type">B</span> a x (<span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">R</span> b y c) z d) = <span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"><span class="title">balance</span> <span class="type">B</span> a x (<span class="type">T</span> <span class="type">R</span> b y (<span class="type">T</span> <span class="type">R</span> c z d)) = <span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"></span><br><span class="line"><span class="title">balance</span> c l x r = <span class="type">T</span> c l x r</span><br></pre></td></tr></table></figure>
+<div class="note "><p>这里又要大吹特吹Haskell支持模式匹配的好处了。</p>
+<p>BST的定义是什么：中缀有序。所以我们将Tree定义写成中缀形式，这样一来从左向右就是有序的，再次说明了“代码即数据”的优点。</p>
+<p>Rotate？根本不需要好吧，因为只要满足“中缀有序”的性质，括号的位置随便加，所以rotate本质就是调整括号位置。</p>
+<p>这里我们利用模式匹配，人为将key写成<code>x</code>、<code>y</code>、<code>z</code>，子树写成<code>a</code>、<code>b</code>、<code>c</code>、<code>d</code>，显然只需要保证平衡前后他们的相对位置不变，BST的性质就没变。</p>
+</div>
+<div class="note warning"><p>需要注意：对于RB-tree的性质3，要保证平衡前后根节点的Black-Height不变，自己手动画一画图就知道了。</p>
+</div>
+<h1 id="deletion">Deletion</h1>
+<p>相比插入，删除操作就复杂的太多了，因为会同时破坏性质2和性质3，所以可能的情况就非常之多，参考<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Red%E2%80%93black_tree">wiki</a>，简直没有任何美感，单纯的暴力的讨论各种可能的情况。</p>
+<p>如果本文也是像wiki那样讨论分析delete的各种情况，那就可以去死了。</p>
+<p>事实上，对于删除操作，存在一种非常巧妙trick，可以将删除的复杂度化简到和插入一样简单，参考<a target="_blank" rel="noopener" href="https://matt.might.net/articles/red-black-delete/?utm_source=pocket_mylist">Matt Might's Blog</a>。</p>
+<p>首先思考一个问题，为啥删除要比插入复杂？或者说为啥插入就那么简单？</p>
+<p>因为我们只插入Red节点，不会破坏性质3，只会破坏性质2。</p>
+<p>同理，我们能否使用相似的策略，使得性质3不被破坏。表面上看貌似不可能，删除Red节点好说，但是如果删除一个Black节点呢？</p>
+<p>尝试换一种视角看待性质3：Red贡献0，Black贡献+1，每个节点的两个儿子具有相同的“加权高度”。</p>
+<p>我们删除一个Black节点，这颗子树的加权高度-1，所以可以通过将其父亲的权重+1来维持性质3。</p>
+<p>非常有意思，相当于我们引入新的“颜色”：Double Black（+2）。显然这只是临时的颜色，最终的RB-tree我们肯定不希望看见这东西，所以需要引入新的操作<code>bubble</code>：如果一个节点的儿子是BB，那么将“权重上调”。所谓“权重上调”，就是将两个儿子的颜色减轻，自己的颜色加深。</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">bubble</span> :: <span class="type">Color</span> -&gt; <span class="type">RBTree</span> a -&gt; a -&gt; <span class="type">RBTree</span> a -&gt; <span class="type">RBTree</span> a</span><br><span class="line"><span class="title">bubble</span> c l x r</span><br><span class="line">    | isBB l || isBB r = balance (blacker c) (redder&#x27; l) x (redder&#x27; r)</span><br><span class="line">    | otherwise        = balance c l x r</span><br></pre></td></tr></table></figure>
+<p>易知，<code>bubble</code>前的非法状态有且仅有以下6种：（图中“灰色”代表Double Black）</p>
+<figure>
+<img src="before_bubble.png" alt="Before Bubble" /><figcaption>Before Bubble</figcaption>
+</figure>
+<p>需要说明：</p>
+<ul>
+<li>为什么没有两个儿子都是Double Black？因为只可能delete的分支传上来一个BB。</li>
+<li>为什么没有父亲兄弟都是Red的情况？因为delete前RB-tree是合法的，这样违背性质2。</li>
+</ul>
+<p>这6种情况<code>bubble</code>后的局面是：(White代表Negative Black(-1) )</p>
+<figure>
+<img src="after_bubble.png" alt="After Bubble" /><figcaption>After Bubble</figcaption>
+</figure>
+<ul>
+<li><p>对于左边两种情况，和插入的非法情况相似，可能导致Red连续，Red连续的情况有4种；</p></li>
+<li><p>对于中间两种情况，可能导致之前插入的非法情况，Red连续有4种；</p></li>
+<li><p>对于右边两种情况，兄弟的“权重下调”，因为兄弟本身就是Red (+0)，下调后是Negative Black(-1)，产生了一种新的颜色Negative Black，显然这东西也不是我们希望看到的，所以也要消除：</p>
+<p><img src="balance_3.jpeg" /></p>
+<p>如上图，因为<code>y</code>是NB，是Red变来的，所以<code>y</code>的两个儿子一定都是Black，不妨选取左儿子，然后平衡。需要注意的是，因为<code>c</code>的Black-Height是<code>n+1</code>和<code>a</code>、<code>b</code>、<code>d</code>不同，所以需要对<code>c</code>进行降级，降级后继续平衡。</p></li>
+</ul>
+<p>综上所述，<code>balance</code>总共有 <span class="math inline">\(4 + 4 + 2 = 10\)</span> 种情况。</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">balance</span> :: <span class="type">Color</span> -&gt; <span class="type">RBTree</span> a -&gt; a -&gt; <span class="type">RBTree</span> a -&gt; <span class="type">RBTree</span> a</span><br><span class="line"></span><br><span class="line"><span class="title">balance</span> <span class="type">B</span> (<span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">R</span> a x b) y c) z d = <span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"><span class="title">balance</span> <span class="type">B</span> (<span class="type">T</span> <span class="type">R</span> a x (<span class="type">T</span> <span class="type">R</span> b y c)) z d = <span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"><span class="title">balance</span> <span class="type">B</span> a x (<span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">R</span> b y c) z d) = <span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"><span class="title">balance</span> <span class="type">B</span> a x (<span class="type">T</span> <span class="type">R</span> b y (<span class="type">T</span> <span class="type">R</span> c z d)) = <span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"></span><br><span class="line"><span class="title">balance</span> <span class="type">BB</span> a x (<span class="type">T</span> <span class="type">R</span> b y (<span class="type">T</span> <span class="type">R</span> c z d)) = <span class="type">T</span> <span class="type">B</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"><span class="title">balance</span> <span class="type">BB</span> a x (<span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">R</span> b y c) z d) = <span class="type">T</span> <span class="type">B</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"><span class="title">balance</span> <span class="type">BB</span> (<span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">R</span> a x b) y c) z d = <span class="type">T</span> <span class="type">B</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"><span class="title">balance</span> <span class="type">BB</span> (<span class="type">T</span> <span class="type">R</span> a x (<span class="type">T</span> <span class="type">R</span> b y c)) z d = <span class="type">T</span> <span class="type">B</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"></span><br><span class="line"><span class="title">balance</span> <span class="type">BB</span> a x (<span class="type">T</span> <span class="type">NB</span> b y (<span class="type">T</span> <span class="type">B</span> c z d)) = <span class="type">T</span> <span class="type">B</span> (balance <span class="type">B</span> a x (redder&#x27; b)) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"><span class="title">balance</span> <span class="type">BB</span> (<span class="type">T</span> <span class="type">NB</span> (<span class="type">T</span> <span class="type">B</span> a x b) y c) z d = <span class="type">T</span> <span class="type">B</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (balance <span class="type">B</span> (redder&#x27; c) z d)</span><br><span class="line"></span><br><span class="line"><span class="title">balance</span> c l x r = <span class="type">T</span> c l x r</span><br></pre></td></tr></table></figure>
+<p>讨论完了<code>bubble</code>和<code>balance</code>，最后回到<code>delete</code>。按照一般的BST删除方法，首先找到该节点，然后删除它：</p>
+<ul>
+<li><code>T R E _ E</code>：红色节点直接删除返回一个<code>E</code>即可；</li>
+<li><code>T B E _ E</code>：黑色节点删除导致Black-Height减少，返回<code>EE</code>，相当于Double Black的Leaf；</li>
+<li>删除节点是黑色，其儿子一个是Red，一个是<code>E</code>，将儿子修改为Black返回；</li>
+<li>左右儿子都不是<code>E</code>，将节点值替换为左儿子的最大值，并在左儿子中删除它。</li>
+</ul>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">delete</span> :: (<span class="type">Ord</span> a) =&gt; a -&gt; <span class="type">RBTree</span> a -&gt; <span class="type">RBTree</span> a</span><br><span class="line"><span class="title">delete</span> v t = blacken $ del t</span><br><span class="line">    <span class="keyword">where</span></span><br><span class="line">        del <span class="type">E</span> = <span class="type">E</span></span><br><span class="line">        del t@(<span class="type">T</span> c l x r) = <span class="keyword">case</span> compare v x <span class="keyword">of</span> </span><br><span class="line">            <span class="type">LT</span> -&gt; bubble c (del l) x r </span><br><span class="line">            <span class="type">GT</span> -&gt; bubble c l x (del r)</span><br><span class="line">            <span class="type">EQ</span> -&gt; remove t</span><br><span class="line"></span><br><span class="line"><span class="title">remove</span> :: <span class="type">RBTree</span> a -&gt; <span class="type">RBTree</span> a</span><br><span class="line"><span class="title">remove</span> (<span class="type">T</span> <span class="type">R</span> <span class="type">E</span> _ <span class="type">E</span>) = <span class="type">E</span></span><br><span class="line"><span class="title">remove</span> (<span class="type">T</span> <span class="type">B</span> <span class="type">E</span> _ <span class="type">E</span>) = <span class="type">EE</span></span><br><span class="line"><span class="title">remove</span> (<span class="type">T</span> <span class="type">B</span> <span class="type">E</span> _ (<span class="type">T</span> <span class="type">R</span> l x r)) = <span class="type">T</span> <span class="type">B</span> l x r</span><br><span class="line"><span class="title">remove</span> (<span class="type">T</span> <span class="type">B</span> (<span class="type">T</span> <span class="type">R</span> l x r) _ <span class="type">E</span>) = <span class="type">T</span> <span class="type">B</span> l x r</span><br><span class="line"><span class="title">remove</span> (<span class="type">T</span> c l x r) = bubble c l&#x27; x&#x27; r</span><br><span class="line">    <span class="keyword">where</span></span><br><span class="line">        l&#x27; = removeMax l</span><br><span class="line">        x&#x27; = findMax l</span><br><span class="line"></span><br><span class="line"><span class="title">removeMax</span> :: <span class="type">RBTree</span> a -&gt; <span class="type">RBTree</span> a </span><br><span class="line"><span class="title">removeMax</span> t@(<span class="type">T</span> _ _ _ <span class="type">E</span>) = remove t</span><br><span class="line"><span class="title">removeMax</span> (<span class="type">T</span> c l x r) = bubble c l x (removeMax r)</span><br><span class="line"></span><br><span class="line"><span class="title">findMax</span> :: <span class="type">RBTree</span> a -&gt; a</span><br><span class="line"><span class="title">findMax</span> <span class="type">E</span> = error <span class="string">&quot;findMax in an empty tree&quot;</span></span><br><span class="line"><span class="title">findMax</span> (<span class="type">T</span> _ _ x <span class="type">E</span>) = x</span><br><span class="line"><span class="title">findMax</span> (<span class="type">T</span> _ _ _ r) = findMax r</span><br></pre></td></tr></table></figure>
+<h1 id="code">Code</h1>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> RBTree <span class="keyword">where</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> Text.PrettyPrint</span><br><span class="line"><span class="keyword">import</span> Prelude <span class="keyword">hiding</span> (<span class="title">lookup</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">Color</span> = <span class="type">NB</span> | <span class="type">R</span> | <span class="type">B</span> | <span class="type">BB</span> <span class="keyword">deriving</span> (<span class="type">Show</span>, <span class="type">Enum</span>)</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">RBTree</span> a = <span class="type">E</span> | <span class="type">EE</span> | <span class="type">T</span> <span class="type">Color</span> (<span class="type">RBTree</span> <span class="title">a</span>) a (<span class="type">RBTree</span> <span class="title">a</span>)</span></span><br><span class="line"></span><br><span class="line"><span class="title">blacker</span> :: <span class="type">Color</span> -&gt; <span class="type">Color</span></span><br><span class="line"><span class="title">blacker</span> = succ</span><br><span class="line"></span><br><span class="line"><span class="title">redder</span> :: <span class="type">Color</span> -&gt; <span class="type">Color</span></span><br><span class="line"><span class="title">redder</span> = pred</span><br><span class="line"></span><br><span class="line"><span class="title">blacker&#x27;</span> :: <span class="type">RBTree</span> a -&gt; <span class="type">RBTree</span> a</span><br><span class="line"><span class="title">blacker&#x27;</span> <span class="type">EE</span> = error <span class="string">&quot;blacker&#x27; a EE node&quot;</span></span><br><span class="line"><span class="title">blacker&#x27;</span> <span class="type">E</span> = <span class="type">EE</span></span><br><span class="line"><span class="title">blacker&#x27;</span> (<span class="type">T</span> c l x r) = <span class="type">T</span> (blacker c) l x r</span><br><span class="line"></span><br><span class="line"><span class="title">redder&#x27;</span> :: <span class="type">RBTree</span> a -&gt; <span class="type">RBTree</span> a</span><br><span class="line"><span class="title">redder&#x27;</span> <span class="type">E</span> = error <span class="string">&quot;redder&#x27; a E node&quot;</span></span><br><span class="line"><span class="title">redder&#x27;</span> <span class="type">EE</span> = <span class="type">E</span></span><br><span class="line"><span class="title">redder&#x27;</span> (<span class="type">T</span> c l x r) = <span class="type">T</span> (redder c) l x r</span><br><span class="line"></span><br><span class="line"><span class="title">isBB</span> :: <span class="type">RBTree</span> a -&gt; <span class="type">Bool</span> </span><br><span class="line"><span class="title">isBB</span> <span class="type">EE</span> = <span class="type">True</span> </span><br><span class="line"><span class="title">isBB</span> (<span class="type">T</span> <span class="type">BB</span> _ _ _) = <span class="type">True</span> </span><br><span class="line"><span class="title">isBB</span> _ = <span class="type">False</span></span><br><span class="line"></span><br><span class="line"><span class="title">blacken</span> :: <span class="type">RBTree</span> a -&gt; <span class="type">RBTree</span> a</span><br><span class="line"><span class="title">blacken</span> (<span class="type">T</span> _ l x r) = <span class="type">T</span> <span class="type">B</span> l x r</span><br><span class="line"><span class="title">blacken</span> _ = <span class="type">E</span></span><br><span class="line"></span><br><span class="line"><span class="title">redden</span> :: <span class="type">RBTree</span> a -&gt; <span class="type">RBTree</span> a</span><br><span class="line"><span class="title">redden</span> (<span class="type">T</span> _ l x r) = <span class="type">T</span> <span class="type">R</span> l x r</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="title">balance</span> :: <span class="type">Color</span> -&gt; <span class="type">RBTree</span> a -&gt; a -&gt; <span class="type">RBTree</span> a -&gt; <span class="type">RBTree</span> a</span><br><span class="line"></span><br><span class="line"><span class="title">balance</span> <span class="type">B</span> (<span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">R</span> a x b) y c) z d = <span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"><span class="title">balance</span> <span class="type">B</span> (<span class="type">T</span> <span class="type">R</span> a x (<span class="type">T</span> <span class="type">R</span> b y c)) z d = <span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"><span class="title">balance</span> <span class="type">B</span> a x (<span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">R</span> b y c) z d) = <span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"><span class="title">balance</span> <span class="type">B</span> a x (<span class="type">T</span> <span class="type">R</span> b y (<span class="type">T</span> <span class="type">R</span> c z d)) = <span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"></span><br><span class="line"><span class="title">balance</span> <span class="type">BB</span> a x (<span class="type">T</span> <span class="type">R</span> b y (<span class="type">T</span> <span class="type">R</span> c z d)) = <span class="type">T</span> <span class="type">B</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"><span class="title">balance</span> <span class="type">BB</span> a x (<span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">R</span> b y c) z d) = <span class="type">T</span> <span class="type">B</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"><span class="title">balance</span> <span class="type">BB</span> (<span class="type">T</span> <span class="type">R</span> (<span class="type">T</span> <span class="type">R</span> a x b) y c) z d = <span class="type">T</span> <span class="type">B</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"><span class="title">balance</span> <span class="type">BB</span> (<span class="type">T</span> <span class="type">R</span> a x (<span class="type">T</span> <span class="type">R</span> b y c)) z d = <span class="type">T</span> <span class="type">B</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"></span><br><span class="line"><span class="title">balance</span> <span class="type">BB</span> a x (<span class="type">T</span> <span class="type">NB</span> b y (<span class="type">T</span> <span class="type">B</span> c z d)) = <span class="type">T</span> <span class="type">B</span> (balance <span class="type">B</span> a x (redder&#x27; b)) y (<span class="type">T</span> <span class="type">B</span> c z d)</span><br><span class="line"><span class="title">balance</span> <span class="type">BB</span> (<span class="type">T</span> <span class="type">NB</span> (<span class="type">T</span> <span class="type">B</span> a x b) y c) z d = <span class="type">T</span> <span class="type">B</span> (<span class="type">T</span> <span class="type">B</span> a x b) y (balance <span class="type">B</span> (redder&#x27; c) z d)</span><br><span class="line"></span><br><span class="line"><span class="title">balance</span> c l x r = <span class="type">T</span> c l x r</span><br><span class="line"></span><br><span class="line"><span class="title">bubble</span> :: <span class="type">Color</span> -&gt; <span class="type">RBTree</span> a -&gt; a -&gt; <span class="type">RBTree</span> a -&gt; <span class="type">RBTree</span> a</span><br><span class="line"><span class="title">bubble</span> c l x r</span><br><span class="line">    | isBB l || isBB r = balance (blacker c) (redder&#x27; l) x (redder&#x27; r)</span><br><span class="line">    | otherwise        = balance c l x r</span><br><span class="line"></span><br><span class="line"><span class="title">insert</span> :: (<span class="type">Ord</span> a) =&gt; a -&gt; <span class="type">RBTree</span> a -&gt; <span class="type">RBTree</span> a</span><br><span class="line"><span class="title">insert</span> v t = blacken $ ins t</span><br><span class="line">    <span class="keyword">where</span>   ins <span class="type">E</span> = <span class="type">T</span> <span class="type">R</span> <span class="type">E</span> v <span class="type">E</span></span><br><span class="line">            ins (<span class="type">T</span> c l x r) = <span class="keyword">case</span> compare v x <span class="keyword">of</span></span><br><span class="line">                <span class="type">LT</span> -&gt; balance c (ins l) x r</span><br><span class="line">                <span class="type">EQ</span> -&gt; <span class="type">T</span> c l x r </span><br><span class="line">                <span class="type">GT</span> -&gt; balance c l x (ins r)</span><br><span class="line"></span><br><span class="line"><span class="title">delete</span> :: (<span class="type">Ord</span> a) =&gt; a -&gt; <span class="type">RBTree</span> a -&gt; <span class="type">RBTree</span> a</span><br><span class="line"><span class="title">delete</span> v t = blacken $ del t</span><br><span class="line">    <span class="keyword">where</span></span><br><span class="line">        del <span class="type">E</span> = <span class="type">E</span></span><br><span class="line">        del t@(<span class="type">T</span> c l x r) = <span class="keyword">case</span> compare v x <span class="keyword">of</span> </span><br><span class="line">            <span class="type">LT</span> -&gt; bubble c (del l) x r </span><br><span class="line">            <span class="type">GT</span> -&gt; bubble c l x (del r)</span><br><span class="line">            <span class="type">EQ</span> -&gt; remove t</span><br><span class="line"></span><br><span class="line"><span class="title">remove</span> :: <span class="type">RBTree</span> a -&gt; <span class="type">RBTree</span> a</span><br><span class="line"><span class="title">remove</span> (<span class="type">T</span> <span class="type">R</span> <span class="type">E</span> _ <span class="type">E</span>) = <span class="type">E</span></span><br><span class="line"><span class="title">remove</span> (<span class="type">T</span> <span class="type">B</span> <span class="type">E</span> _ <span class="type">E</span>) = <span class="type">EE</span></span><br><span class="line"><span class="title">remove</span> (<span class="type">T</span> <span class="type">B</span> <span class="type">E</span> _ (<span class="type">T</span> <span class="type">R</span> l x r)) = <span class="type">T</span> <span class="type">B</span> l x r</span><br><span class="line"><span class="title">remove</span> (<span class="type">T</span> <span class="type">B</span> (<span class="type">T</span> <span class="type">R</span> l x r) _ <span class="type">E</span>) = <span class="type">T</span> <span class="type">B</span> l x r</span><br><span class="line"><span class="title">remove</span> (<span class="type">T</span> c l x r) = bubble c l&#x27; x&#x27; r</span><br><span class="line">    <span class="keyword">where</span></span><br><span class="line">        l&#x27; = removeMax l</span><br><span class="line">        x&#x27; = findMax l</span><br><span class="line"></span><br><span class="line"><span class="title">removeMax</span> :: <span class="type">RBTree</span> a -&gt; <span class="type">RBTree</span> a </span><br><span class="line"><span class="title">removeMax</span> t@(<span class="type">T</span> _ _ _ <span class="type">E</span>) = remove t</span><br><span class="line"><span class="title">removeMax</span> (<span class="type">T</span> c l x r) = bubble c l x (removeMax r)</span><br><span class="line"></span><br><span class="line"><span class="title">findMax</span> :: <span class="type">RBTree</span> a -&gt; a</span><br><span class="line"><span class="title">findMax</span> <span class="type">E</span> = error <span class="string">&quot;findMax in an empty tree&quot;</span></span><br><span class="line"><span class="title">findMax</span> (<span class="type">T</span> _ _ x <span class="type">E</span>) = x</span><br><span class="line"><span class="title">findMax</span> (<span class="type">T</span> _ _ _ r) = findMax r</span><br><span class="line"></span><br><span class="line"><span class="title">lookup</span> :: (<span class="type">Ord</span> a) =&gt; a -&gt; <span class="type">RBTree</span> a -&gt; <span class="type">Maybe</span> a</span><br><span class="line"><span class="title">lookup</span> _ <span class="type">E</span> = <span class="type">Nothing</span> </span><br><span class="line"><span class="title">lookup</span> a (<span class="type">T</span> _ l x r) = <span class="keyword">case</span> compare a x <span class="keyword">of</span> </span><br><span class="line">    <span class="type">LT</span> -&gt; lookup a l</span><br><span class="line">    <span class="type">GT</span> -&gt; lookup a r</span><br><span class="line">    <span class="type">EQ</span> -&gt; <span class="type">Just</span> x</span><br><span class="line"></span><br><span class="line"><span class="comment">---</span></span><br><span class="line"></span><br><span class="line"><span class="title">showTree</span> :: (<span class="type">Show</span> a) =&gt; <span class="type">RBTree</span> a -&gt; <span class="type">Doc</span> </span><br><span class="line"><span class="title">showTree</span> <span class="type">E</span> = text <span class="string">&quot;E&quot;</span></span><br><span class="line"><span class="title">showTree</span> (<span class="type">T</span> c l x r) = </span><br><span class="line">    text <span class="string">&quot;T&quot;</span> &lt;+&gt; text (show c) &lt;+&gt; text (show x)</span><br><span class="line">    $+$ (text <span class="string">&quot;  &quot;</span> &lt;+&gt; vcat [showTree l, showTree r]) </span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="keyword">instance</span> (<span class="type">Show</span> <span class="title">a</span>) =&gt; <span class="type">Show</span> (<span class="type">RBTree</span> <span class="title">a</span>) <span class="keyword">where</span></span></span><br><span class="line">    show = render . showTree</span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="keyword">instance</span> <span class="type">Foldable</span> <span class="type">RBTree</span> <span class="keyword">where</span></span></span><br><span class="line">    foldMap f <span class="type">E</span> = mempty</span><br><span class="line">    foldMap f (<span class="type">T</span> _ l x r) = foldMap f l `mappend` f x `mappend` foldMap f r</span><br><span class="line"></span><br><span class="line"><span class="title">toList</span> :: <span class="type">RBTree</span> a -&gt; [a]</span><br><span class="line"><span class="title">toList</span> = foldr (:) []</span><br><span class="line"></span><br><span class="line"><span class="title">fromList</span> :: (<span class="type">Foldable</span> t, <span class="type">Ord</span> a) =&gt; t a -&gt; <span class="type">RBTree</span> a</span><br><span class="line"><span class="title">fromList</span> = foldr insert <span class="type">E</span> </span><br></pre></td></tr></table></figure>
+<h1 id="conclusion">Conclusion</h1>
+<p>回过头来看看RB-tree，会发现这东西是如此简单，如此自然。</p>
+<p>我们知道了RB-tree和4阶B-tree是同构的，只不过是B-tree的二叉树表示罢了，Red节点不过就是B-tree的内部节点，所以熟悉B-tree的话可以将插入删除都类比B-tree学习。</p>
+<p>对比另一个著名的平衡树AVL，我们能得到什么结论。众所周知，AVL子树高度差不超过2，所以更加“平衡”，RB-tree的子树高度差可能达到一倍之多，所以AVL的高度是严格 <span class="math inline">\(\log (n+1)\)</span>，而RB-tree的高度可能达到 <span class="math inline">\(2\log(n+1)\)</span>。因为高度更低，所以AVL的查询效率更高（理论上最高），但是修改的时候也就更容易破坏结构，需要更多的平衡操作。RB-tree由于其限制更加宽松，只会在Red相邻时平衡，所以常数要小的多。</p>
+<p>下面从更深层次来思考平衡树问题。</p>
+<p>对于绝对平衡的树（所有叶子具有相同深度），显然查询效率一定是最高的，但是它甚至不能够修改，对于2叉满的绝对平衡树，高度为 <span class="math inline">\(h\)</span>，其节点数目为 <span class="math inline">\(2^0 + 2^1 + \cdots + 2^{h-1} = 2^h - 1\)</span>。</p>
+<p>所以我们需要 “放宽松” 限制条件，很直观的就有两种思路：</p>
+<ul>
+<li>放松高度、size等平衡标准的限制：高度差不超过 <span class="math inline">\(\Delta\)</span>，<span class="math inline">\(size_L \leq \alpha \times size_R\)</span> 等等；</li>
+<li>放松树结构的限制：允许多叉树结构。</li>
+</ul>
+<p>本质上，都是引入了“缓冲区”的概念，<del>计算机科学的大多数问题都可以通过加cache解决。</del></p>
+<p>对于放松树结构是最好理解的，2-3 tree是很标准的平衡树结构，但是和AVL一样太过于标准，轻易修改就会导致结构非法，基于2-3 tree的Finger Tree如果允许1、4合法，相当于增加的缓冲区，就会大大减少对于树结构的修改。</p>
+<p>对于放松平衡标准也差不多一个意思，AVL动不动就需要平衡，RB-tree只有在Red连续才需要，Size-Balanced tree只有在左右子树平衡因子超过阈值才平衡，显然这个平衡到非法之间的容错空间就相当于缓冲区。</p>
+<p>当然世上没有十全十美的事情，有些事物天生就是对立的。标准越宽松，结构的改变次数就越少，但是与此同时树也可能越不平衡。所以在实际应用中，要benchmark，要看操作的占比，如果查询远超过修改，显然AVL是最合适的；如果修改远超过查询，对于<code>insert</code>和<code>delete</code>的时间复杂度取决于树高和平衡限制，这之间的平衡点显然取决于实际数据。另一方面，对于结构的控制越多，代码复杂度越高，程序的常数也就越大，Haskell的<code>Set</code>和<code>Map</code>使用Size-Balanced tree就是因为其实现极其简单并且常数很小。</p>
+<p>No silver bullet.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/RB-tree/" rel="tag"><i class="fa fa-tag"></i> RB tree</a>
+              <a href="/tags/Balanced-tree/" rel="tag"><i class="fa fa-tag"></i> Balanced tree</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/05/Applicative-Parser/" rel="prev" title="Applicative Parser">
+                  <i class="fa fa-chevron-left"></i> Applicative Parser
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhuyk6</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{&quot;enable&quot;:true,&quot;theme&quot;:&quot;forest&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mermaid@8.9.3&#x2F;dist&#x2F;mermaid.min.js&quot;,&quot;integrity&quot;:&quot;sha256-OyJHvRcZHaRR6Ig73ppxF4QXk8HzvfgTprRWkulCkfY&#x3D;&quot;}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;,&quot;integrity&quot;:&quot;sha256-ncNI9OXOS5Ek4tzVYiOMmN&#x2F;KKCPZ6V0Cpv2P&#x2F;zHntiA&#x3D;&quot;}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
