@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CNiconne:300,300italic,400,400italic,700,700italic%7CFira+Code:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhuyk6.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Gemini&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Leetcode 798">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Leetcode 798">
+<meta property="og:url" content="https://zhuyk6.github.io/2021/09/15/Leetcode-798/index.html">
+<meta property="og:site_name" content="Zhuyk6&#39;s Blog">
+<meta property="og:description" content="Leetcode 798">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-09-14T23:24:52.000Z">
+<meta property="article:modified_time" content="2021-09-15T00:13:01.498Z">
+<meta property="article:author" content="zhuyk6">
+<meta property="article:tag" content="差分">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zhuyk6.github.io/2021/09/15/Leetcode-798/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;zhuyk6.github.io&#x2F;2021&#x2F;09&#x2F;15&#x2F;Leetcode-798&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;09&#x2F;15&#x2F;Leetcode-798&#x2F;&quot;,&quot;title&quot;:&quot;Leetcode 798&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>Leetcode 798 | Zhuyk6's Blog</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Zhuyk6's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+        <li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#description"><span class="nav-number">1.</span> <span class="nav-text">Description</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sample"><span class="nav-number">2.</span> <span class="nav-text">Sample</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hint"><span class="nav-number">3.</span> <span class="nav-text">Hint</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#solution"><span class="nav-number">4.</span> <span class="nav-text">Solution</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B4%E6%8E%A5%E8%AF%A2%E9%97%AE"><span class="nav-number">4.1.</span> <span class="nav-text">直接询问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%94%E6%A1%88%E8%B4%A1%E7%8C%AE"><span class="nav-number">4.2.</span> <span class="nav-text">答案贡献</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#code"><span class="nav-number">5.</span> <span class="nav-text">Code</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhuyk6</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuyk6" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuyk6" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhuyk6@foxmail.com" title="E-Mail → mailto:zhuyk6@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zhuyk6.github.io/2021/09/15/Leetcode-798/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhuyk6">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhuyk6's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Leetcode 798
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-09-15 07:24:52 / 修改时间：08:13:01" itemprop="dateCreated datePublished" datetime="2021-09-15T07:24:52+08:00">2021-09-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">刷题</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%88%B7%E9%A2%98/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/smallest-rotation-with-highest-score/">Leetcode 798</a></p>
+<span id="more"></span>
+<h1 id="description">Description</h1>
+<p>给定一个数组 <code>A</code>，我们可以将它按一个非负整数 <code>K</code> 进行轮调，这样可以使数组变为 <code>A[K], A[K+1], A&#123;K+2], ... A[A.length - 1], A[0], A[1], ..., A[K-1]</code> 的形式。此后，任何 <strong>值小于或等于其索引</strong> 的项都可以记作一分。</p>
+<p>例如，如果数组为 <code>[2, 4, 1, 3, 0]</code>，我们按 <code>K = 2</code> 进行轮调后，它将变成 <code>[1, 3, 0, 2, 4]</code>。这将记作 3 分，因为 <code>1 &gt; 0</code> [no points], <code>3 &gt; 1</code> [no points], <code>0 &lt;= 2</code> [one point], <code>2 &lt;= 3</code> [one point], <code>4 &lt;= 4</code> [one point]。</p>
+<p>在所有可能的轮调中，返回我们所能得到的最高分数对应的轮调索引 <span class="math inline">\(K\)</span>。如果有多个答案，返回满足条件的最小的索引 <span class="math inline">\(K\)</span>。</p>
+<h1 id="sample">Sample</h1>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">输入：[2, 3, 1, 4, 0]</span><br><span class="line">输出：3</span><br><span class="line">解释：</span><br><span class="line">下面列出了每个 K 的得分：</span><br><span class="line">K = 0,  A = [2,3,1,4,0],    score 2</span><br><span class="line">K = 1,  A = [3,1,4,0,2],    score 3</span><br><span class="line">K = 2,  A = [1,4,0,2,3],    score 3</span><br><span class="line">K = 3,  A = [4,0,2,3,1],    score 4</span><br><span class="line">K = 4,  A = [0,2,3,1,4],    score 3</span><br><span class="line">所以我们应当选择 K = 3，得分最高。</span><br></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入：[1, 3, 0, 2, 4]</span><br><span class="line">输出：0</span><br><span class="line">解释：</span><br><span class="line">A 无论怎么变化总是有 3 分。</span><br><span class="line">所以我们将选择最小的 K，即 0。</span><br></pre></td></tr></table></figure>
+<h1 id="hint">Hint</h1>
+<ul>
+<li><code>A</code> 的长度最大为 <code>20000</code>。</li>
+<li><code>A[i]</code> 的取值范围是 <code>[0, A.length]</code>。</li>
+</ul>
+<h1 id="solution">Solution</h1>
+<p>非常有趣的题目，有很多思考的角度，下面先说明一下我第一次想的方法。</p>
+<h2 id="直接询问">直接询问</h2>
+<p>直接按照题目的要求，对 序列 <code>A</code> 和 下标序列 <code>I</code> 作差 得到序列 <code>D</code>，其中 <span class="math inline">\(d_i = a_i - i\)</span>。这也就是 <span class="math inline">\(K=0\)</span> 时的差序列，随着 <span class="math inline">\(K\)</span> 的增大，我们不需要每次都重新作差：固定下标，值向左旋转；固定值，下标向右旋转。</p>
+<p><span class="math display">\[\begin{matrix} 
+    &amp; a_0 &amp; a_1 &amp; a_2 &amp; \cdots &amp; a_{n-1} \\ 
+k=0 &amp; 0   &amp; 1   &amp; 2   &amp; \cdots &amp; n-1 \\
+k=1 &amp; n-1 &amp; 0   &amp; 1   &amp; \cdots &amp; n-2 \\
+k=2 &amp; n-2 &amp; n-1 &amp; 0   &amp; \cdots &amp; n-3 \\
+\end{matrix}\]</span></p>
+<p>很容易归纳出规律：</p>
+<p><span class="math display">\[\begin{align}
+d_i^0 &amp; = a_i - i \\ 
+d_i^k &amp; = 
+        \begin{cases}
+            d_i^{k-1} + 1, &amp; \text{when $i \neq k-1$} \\
+            d_i^{k-1} + 1 - n &amp; \text{when $i = k-1$}
+        \end{cases} 
+\end{align}\]</span></p>
+<p>我们的任务是什么？对于每一个 <span class="math inline">\(K\)</span>，询问有多少个 <span class="math inline">\(d_i^k \leq 0\)</span>。</p>
+<p>从任务可以看出来，我们甚至不需要迭代计算 <span class="math inline">\(d_i^K\)</span>， 因为每次迭代 “几乎所有” <span class="math inline">\(d_i^K = d_i^{K-1}+1\)</span>，我们改变询问即可：</p>
+<ul>
+<li><span class="math inline">\(k=0\)</span>， 询问多少个 <span class="math inline">\(d_i \leq 0\)</span></li>
+<li><span class="math inline">\(k=1\)</span>， 单独修改 <span class="math inline">\(d_0\)</span>，询问多少个 <span class="math inline">\(d_i \leq -1\)</span></li>
+<li><span class="math inline">\(k=2\)</span>， 单独修改 <span class="math inline">\(d_1\)</span>， 询问多少个 <span class="math inline">\(d_i \leq -2\)</span></li>
+</ul>
+<p>这样一来，我们需要选取一个支持 <code>rank</code> 和 <code>insert</code> 、<code>delete</code> 的数据结构——选取平衡树（或jump list）即可。总的算法复杂度为 <span class="math inline">\(O(N\log N)\)</span>。</p>
+<h2 id="答案贡献">答案贡献</h2>
+<p>第一种方法本质上还是在模拟旋转，然后不断统计答案的直接方法。</p>
+<p>考虑一个“间接”问题：对于每一个 <span class="math inline">\(a_i\)</span>， 哪些 <span class="math inline">\(K\)</span> 的旋转会使得 <span class="math inline">\(a_i\)</span> 参与贡献（答案统计）。</p>
+<p>显然这个问题是可以 <span class="math inline">\(O(1)\)</span> 计算的：</p>
+<ol type="1">
+<li>设 <span class="math inline">\(x = a_i\)</span> ， 旋转后的下标为 <span class="math inline">\(p\)</span></li>
+<li><span class="math inline">\(a_i\)</span> 参与贡献 当且仅当 <span class="math inline">\(x \leq p\)</span> ， 所以 <span class="math inline">\(p = x, x+1, \ldots , n-1\)</span></li>
+<li>旋转满足 <span class="math inline">\(i - K \equiv p \mod n\)</span>，所以 <span class="math inline">\(K \equiv i-p \mod n\)</span></li>
+<li>最终计算得 <span class="math inline">\(K \in [i - (n-1), i - x]\)</span></li>
+</ol>
+<blockquote>
+<p>需要说明，因为在 模 <span class="math inline">\(N\)</span> 意义下，所以 <span class="math inline">\(K\)</span> 所属的这个区间可能会 “裂开” 成两部分</p>
+</blockquote>
+<p>现在问题就简单了，我们知道对于每一个 <span class="math inline">\(a_i\)</span> ，它参与贡献的答案区间，只需要选取合适的数据结构来不断的 “区间添加”即可。</p>
+<p>线段树显然可以胜任。不过本题十分特殊，频繁的 添加操作，却只需要一次答案统计（全部询问），使用差分序列即可满足要求。</p>
+<blockquote>
+<p>差分序列的特点是维护 <span class="math inline">\(d_i = a_i - a_{i-1}\)</span>，对于区间 <span class="math inline">\([l, r]\)</span> 整体改变 <span class="math inline">\(\Delta\)</span>，仅需要 <span class="math inline">\(d_l + \Delta\)</span> 和 <span class="math inline">\(d_{r+1} - \Delta\)</span>。然而差分序列的询问是非常致命的，<span class="math inline">\(a_n = \sum_{i=0}^n d_i\)</span>。</p>
+<p>差分序列的这个 “快速修改”、“慢询问”的特点，很难不让人联想到 Different List <code>DList :: [a] -&gt; [a]</code>，这东西也是用于 快速“构建”列表的。其实某种意义上，差分序列也是一种特殊的 <code>DList</code>，只不过里面维护的不是 <code>[a]</code> 而是 <code>Array</code>。</p>
+</blockquote>
+<h1 id="code">Code</h1>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">bestRotation</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        xs = nums</span><br><span class="line">        n = <span class="built_in">len</span>(xs)</span><br><span class="line"></span><br><span class="line">        d = [<span class="number">0</span>] * (n+<span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">add</span>(<span class="params">l, r, delta</span>):</span></span><br><span class="line">            d[l] += delta</span><br><span class="line">            <span class="keyword">if</span> r &lt; n-<span class="number">1</span>:</span><br><span class="line">                d[r+<span class="number">1</span>] -= delta</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (i, x) <span class="keyword">in</span> <span class="built_in">enumerate</span>(xs):</span><br><span class="line">            <span class="keyword">if</span> x &gt;= n:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># p = x, x+1, x+2, ..., n-1</span></span><br><span class="line">            <span class="keyword">if</span> x &gt; i:</span><br><span class="line">                <span class="comment"># print(i, x, &quot;[&#123;&#125;, &#123;&#125;]&quot;.format(i+1, i-x+n))</span></span><br><span class="line">                add(i + <span class="number">1</span>, i - x + n, <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="comment"># print(i, x, &quot;[&#123;&#125;, &#123;&#125;]&quot;.format(0, i-x))</span></span><br><span class="line">                <span class="comment"># k = i-x, i-(x+1), ..., i-i, i-(i+1)+n...</span></span><br><span class="line">                add(<span class="number">0</span>, i - x, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> i &lt; n-<span class="number">1</span>:</span><br><span class="line">                    <span class="comment"># print(&quot;[&#123;&#125;, &#123;&#125;]&quot;.format(i+1, n-1))</span></span><br><span class="line">                    add(i + <span class="number">1</span>, n - <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        ans = [<span class="number">0</span>, <span class="number">0</span>]</span><br><span class="line">        acc = d[-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">            acc += d[i]</span><br><span class="line">            <span class="comment"># print(&quot;k=&#123;&#125;, score=&#123;&#125;&quot;.format(i, acc))</span></span><br><span class="line">            <span class="keyword">if</span> acc &gt; ans[<span class="number">0</span>]:</span><br><span class="line">                ans[<span class="number">0</span>] = acc</span><br><span class="line">                ans[<span class="number">1</span>] = i</span><br><span class="line">        <span class="keyword">return</span> ans[<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%B7%AE%E5%88%86/" rel="tag"><i class="fa fa-tag"></i> 差分</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/15/Leetcode-803/" rel="prev" title="Leetcode 803">
+                  <i class="fa fa-chevron-left"></i> Leetcode 803
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhuyk6</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{&quot;enable&quot;:true,&quot;theme&quot;:&quot;forest&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mermaid@8.9.3&#x2F;dist&#x2F;mermaid.min.js&quot;,&quot;integrity&quot;:&quot;sha256-OyJHvRcZHaRR6Ig73ppxF4QXk8HzvfgTprRWkulCkfY&#x3D;&quot;}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;,&quot;integrity&quot;:&quot;sha256-ncNI9OXOS5Ek4tzVYiOMmN&#x2F;KKCPZ6V0Cpv2P&#x2F;zHntiA&#x3D;&quot;}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
