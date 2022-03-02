@@ -28,7 +28,7 @@
 <meta property="og:description" content="本文按照考研408的思路，从头开始给出KMP的推导，并给出一份简洁的KMP模板。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-02-22T12:38:50.000Z">
-<meta property="article:modified_time" content="2022-02-22T13:50:05.480Z">
+<meta property="article:modified_time" content="2022-03-02T13:56:30.777Z">
 <meta property="article:author" content="zhuyk6">
 <meta property="article:tag" content="字符串">
 <meta name="twitter:card" content="summary">
@@ -147,7 +147,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-count">36</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -217,10 +217,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2022-02-22 20:38:50 / 修改时间：21:50:05" itemprop="dateCreated datePublished" datetime="2022-02-22T20:38:50+08:00">2022-02-22</time>
+      <time title="创建时间：2022-02-22 20:38:50" itemprop="dateCreated datePublished" datetime="2022-02-22T20:38:50+08:00">2022-02-22</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2022-03-02 21:56:30" itemprop="dateModified" datetime="2022-03-02T21:56:30+08:00">2022-03-02</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -466,7 +472,7 @@
 </tr>
 </tbody>
 </table>
-<p>在这个例子中，当位置 2 的匹配失败后，此时 <span class="math inline">\(s\)</span> 中的位置是 <span class="math inline">\(i=2\)</span>，<span class="math inline">\(p\)</span> 中的位置 <span class="math inline">\(j=2\)</span>，移动一次是没有意义的，至少也要移动两次使得 <span class="math inline">\(p\)</span> 的前缀和 <span class="math inline">\(s[0:i]\)</span> 的后缀重合，，不难发现，匹配失败后的移动次数有如下关系：</p>
+<p>在这个例子中，当位置 2 的匹配失败后，此时 <span class="math inline">\(s\)</span> 中的位置是 <span class="math inline">\(i=2\)</span>，<span class="math inline">\(p\)</span> 中的位置 <span class="math inline">\(j=2\)</span>，移动一次是没有意义的，至少也要移动两次使得 <span class="math inline">\(p\)</span> 的前缀和 <span class="math inline">\(s[0:i]\)</span> 的后缀重合，不难发现，匹配失败后的移动次数有如下关系：</p>
 <p><span class="math display">\[Move = j - PM[j-1]\]</span></p>
 <table>
 <thead>
@@ -631,7 +637,17 @@
 <p>仔细观察不难发现，<span class="math inline">\(next\)</span> 是 <span class="math inline">\(PM\)</span> 右移一位的结果，最后一个位置的 <span class="math inline">\(PM\)</span> 值被丢掉了，如果我们没有舍弃它，其含义就是匹配完后 <span class="math inline">\(j\)</span> 应该转移的结果，相当于在 p 串末尾添加了一个永远匹配失败的字符。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">kmp_all</span><span class="params">(<span class="keyword">const</span> string &amp; s, <span class="keyword">const</span> string &amp; p)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// get next</span></span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">next</span><span class="params">(p.length() + <span class="number">1</span>)</span></span>;</span><br><span class="line">    next[<span class="number">0</span>] = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> j = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; p.<span class="built_in">length</span>(); ++i) &#123;</span><br><span class="line">        <span class="keyword">while</span> (j != <span class="number">-1</span> &amp;&amp; p[j] != p[i]) j = next[j];</span><br><span class="line">        ++j;</span><br><span class="line">        next[i+<span class="number">1</span>] = p[i+<span class="number">1</span>] == p[j] ? next[j] : j;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// get index</span></span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; ans;</span><br><span class="line">    j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.<span class="built_in">length</span>(); ++i) &#123;</span><br><span class="line">        <span class="keyword">while</span> (j != <span class="number">-1</span> &amp;&amp; p[j] != s[i]) j = next[j];</span><br><span class="line">        ++j;</span><br><span class="line">        <span class="keyword">if</span> (j == p.<span class="built_in">length</span>()) &#123;</span><br><span class="line">            ans.<span class="built_in">push_back</span>(i - j + <span class="number">1</span>);</span><br><span class="line">            j = next[j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="效率分析">效率分析</h1>
-<p>KMP 的改进就是 “母串不回溯”，容易发现 <span class="math inline">\(i\)</span> 是单调增长的，对于 <span class="math inline">\(j\)</span> 的分析我也不太明白，最终的时间复杂度是 <span class="math inline">\(O(M+N)\)</span>。</p>
+<ul>
+<li>KMP 的改进就是 “母串不回溯”，容易发现 <span class="math inline">\(i\)</span> 是单调增长的。</li>
+<li>对于 <span class="math inline">\(j\)</span> 的分析并不是很容易，因为匹配失败后 <span class="math inline">\(j\)</span> 沿着 fail 指针向前跳跃的次数无法得知，但是可以使用 <strong>均摊分析</strong> ：
+<ul>
+<li>每次成功匹配后 <span class="math inline">\(j\)</span> 会 <span class="math inline">\(+1\)</span> ；</li>
+<li><span class="math inline">\(j\)</span> 增加的次数和母串的长度相当；</li>
+<li><span class="math inline">\(j\)</span> 向前跳跃的次数不超过 <span class="math inline">\(j\)</span> 的大小；</li>
+<li><span class="math inline">\(j\)</span> 的变化也是 <span class="math inline">\(O(N)\)</span> 级别的。</li>
+</ul></li>
+<li>综上所述，整个 KMP 的时间复杂度是 <span class="math inline">\(O(N+M)\)</span>。</li>
+</ul>
 
     </div>
 

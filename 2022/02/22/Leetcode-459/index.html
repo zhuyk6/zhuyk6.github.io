@@ -20,16 +20,18 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
 <script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;zhuyk6.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Gemini&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
-<meta name="description" content="Leetcode xxx">
+<meta name="description" content="Leetcode 459">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Leetcode 459">
 <meta property="og:url" content="https://zhuyk6.github.io/2022/02/22/Leetcode-459/index.html">
 <meta property="og:site_name" content="Zhuyk6&#39;s Blog">
-<meta property="og:description" content="Leetcode xxx">
+<meta property="og:description" content="Leetcode 459">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-02-22T12:38:33.000Z">
-<meta property="article:modified_time" content="2022-02-22T12:38:33.796Z">
+<meta property="article:modified_time" content="2022-03-02T14:27:23.584Z">
 <meta property="article:author" content="zhuyk6">
+<meta property="article:tag" content="字符串">
+<meta property="article:tag" content="KMP">
 <meta name="twitter:card" content="summary">
 
 
@@ -146,7 +148,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-count">36</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -219,6 +221,13 @@
 
       <time title="创建时间：2022-02-22 20:38:33" itemprop="dateCreated datePublished" datetime="2022-02-22T20:38:33+08:00">2022-02-22</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2022-03-02 22:27:23" itemprop="dateModified" datetime="2022-03-02T22:27:23+08:00">2022-03-02</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -243,13 +252,58 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p><a href="xxx">Leetcode xxx</a></p>
+        <p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/repeated-substring-pattern/">Leetcode 459</a></p>
 <span id="more"></span>
 <h1 id="description">Description</h1>
+<p>给定一个非空的字符串 s ，检查是否可以通过由它的一个子串重复多次构成。</p>
 <h1 id="sample">Sample</h1>
+<p>示例 1:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: s = &quot;abab&quot;</span><br><span class="line">输出: true</span><br><span class="line">解释: 可由子串 &quot;ab&quot; 重复两次构成。</span><br></pre></td></tr></table></figure>
+<p>示例 2: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: s = &quot;aba&quot;</span><br><span class="line">输出: false</span><br></pre></td></tr></table></figure></p>
+<p>示例 3:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: s = &quot;abcabcabcabc&quot;</span><br><span class="line">输出: true</span><br><span class="line">解释: 可由子串 &quot;abc&quot; 重复四次构成。 (或子串 &quot;abcabc&quot; 重复两次构成。)</span><br></pre></td></tr></table></figure>
 <h1 id="hint">Hint</h1>
+<ul>
+<li><span class="math inline">\(1 \leq s.length \leq 10^4\)</span></li>
+<li>s 由小写英文字母组成</li>
+</ul>
 <h1 id="solution">Solution</h1>
+<p>本题很有意思，非常值的思考。</p>
+<p>首先我们来考虑必要性，如果 <span class="math inline">\(s = p+p+p+\cdots +p\)</span>，那么显然将 <span class="math inline">\(s\)</span> 右移 <span class="math inline">\(|p|\)</span> 位一定是可以和原来的 <span class="math inline">\(s\)</span> 对齐的，如下表：</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>s</td>
+<td>p</td>
+<td>p</td>
+<td>p</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>s'</td>
+<td></td>
+<td>p</td>
+<td>p</td>
+<td>p</td>
+</tr>
+</tbody>
+</table>
+<p>换言之，如果另 <span class="math inline">\(t = s + s\)</span>，进行 <code>findall(t, s)</code> 算法求解所有 <span class="math inline">\(s\)</span> 在 <span class="math inline">\(t\)</span> 中出现的位置，结果除了 <span class="math inline">\(0, N\)</span> 以外一定包含其他位置。</p>
+<p>这个条件是充分的吗？</p>
+<p>设 <span class="math inline">\(0 &lt; k &lt; N\)</span> 是 <code>findall(t, s)</code> 的结果之一，意味着 <span class="math inline">\(s\)</span> 右移 <span class="math inline">\(k\)</span> 位可以和原来重合，不难观察发现有下面的关系：</p>
+<p><span class="math display">\[\forall i, \quad s[i] = s[i+k] = s[i+2k] = \cdots = s[i+nk] \quad , \mod N\]</span></p>
+<p>在 <span class="math inline">\(\mod N\)</span> 意义下，<span class="math inline">\(s\)</span> 有长度为 <span class="math inline">\(k\)</span> 的循环节，也就是说 <span class="math inline">\(s\)</span> 有长度为 <span class="math inline">\(\gcd(N, k)\)</span> 的循环节，又因为 <span class="math inline">\(\gcd(N, k) | N\)</span> 且 <span class="math inline">\(k &lt; N\)</span>，所以我们找到了 <span class="math inline">\(p\)</span> 长度为 <span class="math inline">\(\gcd(N, k)\)</span>，充分性证毕。</p>
 <h1 id="code">Code</h1>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">kmp</span><span class="params">(<span class="keyword">const</span> string &amp; s, <span class="keyword">const</span> string &amp; p)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// get next</span></span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">next</span><span class="params">(p.length()+<span class="number">1</span>)</span></span>;</span><br><span class="line">    next[<span class="number">0</span>] = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">int</span> j = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; p.<span class="built_in">length</span>(); ++i) &#123;</span><br><span class="line">        <span class="keyword">while</span> (j != <span class="number">-1</span> &amp;&amp; p[j] != p[i]) j = next[j];</span><br><span class="line">        ++j;</span><br><span class="line">        next[i+<span class="number">1</span>] = p[i+<span class="number">1</span>] == p[j] ? next[j] : j;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// get index</span></span><br><span class="line">    j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.<span class="built_in">length</span>(); ++i) &#123;</span><br><span class="line">        <span class="keyword">while</span> (j != <span class="number">-1</span> &amp;&amp; p[j] != s[i]) j = next[j];</span><br><span class="line">        ++j;</span><br><span class="line">        <span class="keyword">if</span> (j == p.<span class="built_in">length</span>())</span><br><span class="line">            <span class="keyword">return</span> i - j + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">repeatedSubstringPattern</span><span class="params">(string s)</span> </span>&#123;</span><br><span class="line">        string t = s + s;</span><br><span class="line">        t = t.<span class="built_in">substr</span>(<span class="number">1</span>, <span class="number">2</span> * s.<span class="built_in">length</span>() - <span class="number">2</span>);</span><br><span class="line">        <span class="comment">// cout &lt;&lt; t &lt;&lt; endl;</span></span><br><span class="line">        <span class="comment">// cout &lt;&lt; s &lt;&lt; endl;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">kmp</span>(t, s) != <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -258,6 +312,10 @@
     
 
     <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag"><i class="fa fa-tag"></i> 字符串</a>
+              <a href="/tags/KMP/" rel="tag"><i class="fa fa-tag"></i> KMP</a>
+          </div>
 
         
 
@@ -323,7 +381,7 @@
 
   
 
-  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;,&quot;integrity&quot;:&quot;sha256-ncNI9OXOS5Ek4tzVYiOMmN&#x2F;KKCPZ6V0Cpv2P&#x2F;zHntiA&#x3D;&quot;}}</script>
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;,&quot;integrity&quot;:&quot;sha256-ncNI9OXOS5Ek4tzVYiOMmN&#x2F;KKCPZ6V0Cpv2P&#x2F;zHntiA&#x3D;&quot;}}</script>
 <script src="/js/third-party/math/mathjax.js"></script>
 
 
