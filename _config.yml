@@ -104,5 +104,5 @@ theme: next
 deploy:
   type: git
   # repo: git@github.com:zhuyk6/zhuyk6.github.io.git
-  repo: https://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@github.com/zhuyk6/zhuyk6.github.io.git
+  repo: https://github.com/zhuyk6/zhuyk6.github.io.git
   branch: master
