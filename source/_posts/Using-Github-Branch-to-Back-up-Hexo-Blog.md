@@ -1,9 +1,10 @@
 ---
 title: Using Github Branch to Back up Hexo Blog
-tags: []
+tags: [blog]
 mathjax: false
 date: 2022-06-16 08:23:32
 categories:
+- Tools
 ---
 
 本文介绍如何使用`git branch`实现在github上备份hexo blog。
@@ -24,9 +25,9 @@ categories:
 
 # git ignore
 
-```
-# .gitignore
+`.gitignore` 文件如下：
 
+```
 .DS_Store
 Thumbs.db
 db.json
