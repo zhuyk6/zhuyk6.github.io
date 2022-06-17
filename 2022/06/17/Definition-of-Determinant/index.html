@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CNiconne:300,300italic,400,400italic,700,700italic%7CFira+Code:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zhuyk6.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文讨论determinant（行列式）的定义。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Definition of Determinant">
+<meta property="og:url" content="https://zhuyk6.github.io/2022/06/17/Definition-of-Determinant/index.html">
+<meta property="og:site_name" content="Zhuyk6&#39;s Blog">
+<meta property="og:description" content="本文讨论determinant（行列式）的定义。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-06-16T20:42:32.000Z">
+<meta property="article:modified_time" content="2022-06-17T01:52:59.704Z">
+<meta property="article:author" content="zhuyk6">
+<meta property="article:tag" content="determinant">
+<meta property="article:tag" content="matrix">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zhuyk6.github.io/2022/06/17/Definition-of-Determinant/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://zhuyk6.github.io/2022/06/17/Definition-of-Determinant/","path":"2022/06/17/Definition-of-Determinant/","title":"Definition of Determinant"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Definition of Determinant | Zhuyk6's Blog</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Zhuyk6's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%8C%E5%88%97%E5%BC%8F%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">行列式定义</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8C%E5%88%97%E5%BC%8F%E7%9A%84%E7%AC%AC%E4%B8%80%E5%85%AC%E7%90%86%E5%8C%96%E6%9E%84%E9%80%A0"><span class="nav-number">1.1.</span> <span class="nav-text">行列式的第一公理化构造</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E5%85%AC%E7%90%86%E5%8C%96%E6%9E%84%E9%80%A0"><span class="nav-number">1.2.</span> <span class="nav-text">第二公理化构造</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%99%E5%AD%90%E5%BC%8F%E5%B1%95%E5%BC%80%E7%9A%84%E5%BD%92%E7%BA%B3%E5%AE%9A%E4%B9%89"><span class="nav-number">1.3.</span> <span class="nav-text">余子式展开的归纳定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E4%B9%98%E6%B3%95%E6%80%A7%E8%B4%A8%E7%9A%84%E5%88%BB%E7%94%BB"><span class="nav-number">1.4.</span> <span class="nav-text">通过乘法性质的刻画</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%8C%E5%88%97%E5%BC%8F%E5%87%A0%E7%A7%8D%E5%AE%9A%E4%B9%89%E7%9A%84%E7%AD%89%E4%BB%B7%E6%80%A7"><span class="nav-number">2.</span> <span class="nav-text">行列式几种定义的等价性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E5%85%AC%E7%90%86%E6%8E%A8%E5%87%BA%E7%AC%AC%E4%BA%8C%E5%85%AC%E7%90%86"><span class="nav-number">2.1.</span> <span class="nav-text">第一公理推出第二公理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E5%85%AC%E7%90%86%E6%8E%A8%E5%87%BA%E7%AC%AC%E4%B8%80%E5%85%AC%E7%90%86"><span class="nav-number">2.2.</span> <span class="nav-text">第二公理推出第一公理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#laplace-expansion"><span class="nav-number">2.3.</span> <span class="nav-text">Laplace expansion</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%B1%E5%85%AC%E7%90%86%E7%94%9F%E6%88%90%E5%AE%9A%E4%B9%89"><span class="nav-number">3.</span> <span class="nav-text">由公理生成定义</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhuyk6</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuyk6" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuyk6" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhuyk6@foxmail.com" title="E-Mail → mailto:zhuyk6@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zhuyk6.github.io/2022/06/17/Definition-of-Determinant/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhuyk6">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zhuyk6's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Definition of Determinant | Zhuyk6's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Definition of Determinant
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-06-17 04:42:32 / 修改时间：09:52:59" itemprop="dateCreated datePublished" datetime="2022-06-17T04:42:32+08:00">2022-06-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Math/" itemprop="url" rel="index"><span itemprop="name">Math</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Math/Matrix/" itemprop="url" rel="index"><span itemprop="name">Matrix</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>本文讨论determinant（行列式）的定义。</p>
+<span id="more"></span>
+<p>参考资料：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/52957345/answer/589376055">行列式的逆序数定义是怎么想出来的？ - 踧远陵歊的回答 - 知乎</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Laplace_expansion">Laplace expansion - wiki</a></li>
+</ul>
+<h1 id="行列式定义">行列式定义</h1>
+<p>下面给出几种行列式的定义。</p>
+<h2 id="行列式的第一公理化构造">行列式的第一公理化构造</h2>
+<p>满足以下三条性质的函数 <span class="math inline">\(\mathcal{D}:M_n(F) \rightarrow F\)</span></p>
+<ol type="1">
+<li>（斜对称性）<span class="math inline">\(\mathcal{D}(\ldots, a_i, \ldots, a_j , \ldots) = -\mathcal{D}(\ldots, a_j, \ldots, a_i, \ldots)\)</span></li>
+<li>（多重线性）<span class="math inline">\(\mathcal{D}(\ldots, c_1a_1+c_2a_2\cdots,\ldots) = c_1\mathcal{D}(\ldots, a_1, \ldots) + c_2\mathcal{D}(\ldots, a_2, \ldots) + \cdots\)</span></li>
+<li>（正规化条件）<span class="math inline">\(\mathcal{D}(E) = 1\)</span></li>
+</ol>
+<p>是唯一确定的，称作矩阵<span class="math inline">\(A\)</span>的行列式。数域 <span class="math inline">\(F\)</span> 可以是 <span class="math inline">\(\mathbb{R}\)</span> 或者 <span class="math inline">\(\mathbb{C}\)</span> 。</p>
+<h2 id="第二公理化构造">第二公理化构造</h2>
+<p>函数 <span class="math inline">\(\mathcal{D}\)</span> 需要满足以下三个条件：</p>
+<ol type="1">
+<li><span class="math inline">\(\mathcal{D}(\ldots, \lambda a_i, \ldots) = \lambda \mathcal{D}(\ldots, a_i, \ldots)\)</span></li>
+<li><span class="math inline">\(\mathcal{D}(\ldots, a_i + a_j, \ldots , a_j, \ldots) = \mathcal{D}(\ldots, a_i, \ldots, a_j, \ldots)\)</span></li>
+<li><span class="math inline">\(\mathcal{D}(E) = 1\)</span></li>
+</ol>
+<h2 id="余子式展开的归纳定义">余子式展开的归纳定义</h2>
+<p><span class="math display">\[\mathcal{D}(A) = \sum_{j=1}^n (-1)^{i+j} a_{ij} M_{ij}\]</span></p>
+<h2 id="通过乘法性质的刻画">通过乘法性质的刻画</h2>
+<p>函数 <span class="math inline">\(\mathcal{D}\)</span> 需要满足下面三个条件：</p>
+<ol type="1">
+<li><span class="math inline">\(\forall A, B \in M_n, \mathcal{D}(AB) = \mathcal{D}(A)\mathcal{D}(B)\)</span></li>
+<li>对于 <span class="math inline">\(E(i,j)\)</span>, <span class="math inline">\(\mathcal{D}(E(i,j)) = -1\)</span>，<span class="math inline">\(E(i,j)\)</span> 表示交换两行的初等变换。</li>
+<li>对于主对角线为 <span class="math inline">\((\lambda, 1, 1, \ldots, 1)\)</span> 的上三角矩阵 <span class="math inline">\(A\)</span>，<span class="math inline">\(\mathcal{D}(A) = \lambda\)</span></li>
+</ol>
+<h1 id="行列式几种定义的等价性">行列式几种定义的等价性</h1>
+<h2 id="第一公理推出第二公理">第一公理推出第二公理</h2>
+<p><span class="math display">\[
+\begin{align}
+&amp; \because \mathcal{D}\left(\ldots, \sum_{i} c_i a_i , \ldots\right) = \sum_{i}c_i\mathcal{D}\left(\ldots, a_i, \ldots \right) \\
+&amp; \therefore \mathcal{D}\left( \ldots, \lambda a, \ldots \right) = \lambda \mathcal{D}\left( \ldots, a, \ldots \right) \\
+&amp; \because \mathcal{D}\left(\ldots, a, \ldots, a, \ldots\right) = - \mathcal{D}\left(\ldots, a,\ldots, a, \ldots \right) \\
+&amp; \therefore \mathcal{D}\left(\ldots, a, \ldots, a, \ldots \right)=0 \\
+&amp; \therefore \mathcal{D}\left(\ldots, a_i+a_j, \ldots, a_j, \ldots\right) \\
+ &amp;= \mathcal{D}\left(\ldots, a_i, \ldots, a_j, \ldots \right) + \mathcal{D}\left(\ldots, a_j, \ldots, a_j, \ldots \right) \\
+ &amp; = \mathcal{D}\left(\ldots, a_i, \ldots, a_j, \ldots \right) \\
+\end{align}
+\]</span></p>
+<h2 id="第二公理推出第一公理">第二公理推出第一公理</h2>
+<p>todo!</p>
+<h2 id="laplace-expansion">Laplace expansion</h2>
+<p>设 <span class="math inline">\(A \in M_n\)</span>，<span class="math inline">\(i,j \in \lbrace 1,2,\ldots,n\rbrace\)</span>，<span class="math inline">\(B\)</span> 的元素为 <span class="math inline">\(b_{i,j}\)</span>，<span class="math inline">\(M_{i,j}\)</span> 为 <span class="math inline">\(B\)</span> 去除第 <span class="math inline">\(i\)</span> 行 <span class="math inline">\(j\)</span> 列的余子式，<span class="math inline">\(a_{s,t}\)</span> 为 <span class="math inline">\(M_{i,j}\)</span> 的元素。</p>
+<p>考虑 <span class="math inline">\(\det B\)</span> 中包含 <span class="math inline">\(b_{i,j}\)</span> 的项，具有以下形式：</p>
+<p><span class="math display">\[\begin{align}
+&amp; \text{sgn}(\tau) b_{1,\tau(1)} b_{2, \tau(2)} \cdots b_{i,j} \cdots b_{n, \tau(n)} \\ 
+= &amp; \text{sgn}(\tau) b_{i,j} b_{1,\tau(1)} b_{2,\tau(2)} \cdots b_{i-1,\tau(i-1)} b_{i+1,\tau(i+1) \cdots b_{n, \tau(n)}} \\
+= &amp; \text{sgn}(\tau) b_{i,j} a_{1, \sigma(1)} a_{2, \sigma(2)} \cdots a_{i-1, \sigma(i-1)} a_{i, \sigma(i)} \cdots a_{n-1, \sigma(n-1)}
+\end{align}\]</span></p>
+<p>其中 <span class="math inline">\(\tau \in S_n\)</span> 是某个排列，<span class="math inline">\(j = \tau(i)\)</span> ， 存在一个唯一的排列 <span class="math inline">\(\sigma \in S_{n-1}\)</span>，事实上 <span class="math inline">\(\sigma \leftrightarrow \tau\)</span> 构成了 <span class="math inline">\(S_{n-1}\)</span> 和 <span class="math inline">\(\lbrace \tau \in S_n : \tau(i)=j \rbrace\)</span> 之间的一一映射。<span class="math inline">\(\tau\)</span> 和 <span class="math inline">\(\sigma\)</span> 之间的关系如下：</p>
+<p><span class="math display">\[\sigma = 
+\begin{pmatrix}  
+1 &amp; 2 &amp; \cdots &amp; i-1 &amp; i &amp; \cdots &amp; n-1 \\ 
+(\leftarrow)_j \tau(1) &amp; (\leftarrow)_j \tau(2) &amp; \cdots &amp; (\leftarrow)_j \tau(i-1) &amp; (\leftarrow)_j \tau(i+1)&amp;  \cdots &amp; (\leftarrow)_j \tau(n)
+\end{pmatrix}\]</span></p>
+<p>其中 <span class="math inline">\((\leftarrow)_j = (n, n-1, \ldots, j+1, j)\)</span> 表示一个cycle，其含义是将大于 <span class="math inline">\(j\)</span> 的数字减去 <span class="math inline">\(1\)</span>，从而将所有数字映射到 <span class="math inline">\(\lbrace 1, 2, \ldots, n-1 \rbrace\)</span> 。</p>
+<p>排列 <span class="math inline">\(\tau\)</span> 也可以由 <span class="math inline">\(\sigma\)</span> 得到。首先定义 <span class="math inline">\(\sigma&#39;\in S_n\)</span>，对于 <span class="math inline">\(1\leq k \leq n-1\)</span>，<span class="math inline">\(\sigma&#39;(k) = \sigma(k)\)</span>，并且 <span class="math inline">\(\sigma&#39;(n) = n\)</span>，即：</p>
+<p><span class="math display">\[\sigma&#39; = 
+\begin{pmatrix}  
+1 &amp; 2 &amp; \cdots &amp; i-1 &amp; i &amp; \cdots &amp; n-1 &amp; n\\ 
+(\leftarrow)_j \tau(1) &amp; (\leftarrow)_j \tau(2) &amp; \cdots &amp; (\leftarrow)_j \tau(i-1) &amp; (\leftarrow)_j \tau(i+1)&amp;  \cdots &amp; (\leftarrow)_j \tau(n) &amp; n
+\end{pmatrix}\]</span></p>
+<p>首先作用 <span class="math inline">\((\leftarrow)_i\)</span> 然后作用 <span class="math inline">\(\sigma&#39;\)</span> 得到：</p>
+<p><span class="math display">\[\sigma&#39; (\leftarrow)_i = 
+\begin{pmatrix}  
+1 &amp; 2 &amp; \cdots &amp; i-1 &amp; i+1 &amp; \cdots &amp; n &amp; i\\ 
+(\leftarrow)_j \tau(1) &amp; (\leftarrow)_j \tau(2) &amp; \cdots &amp; (\leftarrow)_j \tau(i-1) &amp; (\leftarrow)_j \tau(i+1)&amp;  \cdots &amp; (\leftarrow)_j \tau(n) &amp; n
+\end{pmatrix}\]</span></p>
+<p>首先作用 <span class="math inline">\(\tau\)</span> 然后作用 <span class="math inline">\((\leftarrow)_j\)</span> 得到：</p>
+<p><span class="math display">\[(\leftarrow)_j \tau = 
+\begin{pmatrix}  
+1 &amp; 2 &amp; \cdots &amp; i-1 &amp; i &amp; i+1 &amp; \cdots &amp; n\\ 
+(\leftarrow)_j \tau(1) &amp; (\leftarrow)_j \tau(2) &amp; \cdots &amp; (\leftarrow)_j \tau(i-1) &amp; n &amp; (\leftarrow)_j \tau(i+1) &amp; \cdots &amp; (\leftarrow)_j \tau(n)
+\end{pmatrix}\]</span></p>
+<p>观察可得 <span class="math inline">\(\sigma&#39; (\leftarrow)_i = (\leftarrow)_j \tau\)</span>，所以</p>
+<p><span class="math display">\[\begin{align}
+\tau &amp; = (\rightarrow)_j \sigma&#39; (\leftarrow)_i \\
+ &amp; = \begin{pmatrix}j &amp; j+1 &amp; \cdots &amp; n \end{pmatrix} \sigma&#39; \begin{pmatrix} n &amp; n-1 &amp; \cdots &amp;  i \end{pmatrix} \\
+\text{sgn}(\tau) &amp; = \text{sgn}(\sigma&#39;) (-1)^{n-j + n-i} = \text{sgn}(\sigma) (-1)^{i+j}
+\end{align}\]</span></p>
+<div class="note info"><p>长度为 <span class="math inline">\(n\)</span> 的 cycle <span class="math inline">\(c_n\)</span> 可以分解为 <span class="math inline">\(n-1\)</span> 次交换，所以 <span class="math inline">\(\text{sgn}(c_n) = (-1)^{n-1}\)</span> 。</p>
+</div>
+<p>既然 <span class="math inline">\(\tau \leftrightarrow \sigma\)</span> 是一一映射，所以</p>
+<p><span class="math display">\[\begin{align}
+\sum_{i=1}^n \sum_{\tau \in S_n : \tau(i) = j} \text{sgn}(\tau) b_{1, \tau(1)} \cdots b_{n, \tau(n)}
+&amp; = \sum_{i=1}^n \sum_{\sigma \in S_{n-1}} (-1)^{i+j} \text{sgn}(\sigma) b_{i,j} a_{1,\sigma(1)} \cdots a_{n-1, \sigma(n-1)} \\
+&amp; = \sum_{i=1}^n b_{i,j} (-1)^{i+1} \sum_{\sigma \in S_{n-1}} \text{sign}(\sigma) a_{1,\sigma(1)} \cdots a_{n-1, \sigma(n-1)} \\
+&amp; = \sum_{i=1}^n b_{i,j} (-1)^{i+j} M_{i,j}
+\end{align}\]</span></p>
+<h1 id="由公理生成定义">由公理生成定义</h1>
+<p><span class="math inline">\(\forall A \in M_n, A = (a_1, \ldots, a_n)\)</span>，其中 <span class="math inline">\(a_i\)</span> 表示第 <span class="math inline">\(i\)</span> 行， <span class="math inline">\(E=(e_1, \ldots, e_n)\)</span> 表示单位矩阵。</p>
+<p><span class="math display">\[\begin{align} \mathcal{D}(A) &amp; = \mathcal{D}(a_1, \ldots, a_n) \\
+&amp; = \mathcal{D}\left(\sum_{i=1}^n a_{1i}e_i, \ldots, a_n \right) \\
+&amp; = \sum_{i=1}^n a_{1i} \mathcal{D}\left(e_i, \ldots, a_n \right)\\
+&amp; = \sum_{i=1}^n a_{1i} \mathcal{D} \left( e_i, \sum_{j=1}^n a_{2j}e_j\ldots, a_n \right) \\ 
+&amp; = \sum_{i=1}^n \sum_{j=1}^n a_{1i} a_{2j} \mathcal{D}\left( e_i, e_j, \ldots, a_n \right) \\
+&amp; = \sum_{i=1}^n \sum_{j=1}^n \cdots \sum_{k=1}^n a_{1i} a_{2j} \cdots a_{nk} \mathcal{D}\left(e_i, e_j, \ldots, e_k \right) \end{align}\]</span></p>
+<p>根据<mark class="label ">第一公理</mark>，可以证明<strong>引理</strong>：<span class="math inline">\(\mathcal{D}(\ldots, a, \ldots, a, \ldots) = 0\)</span>。</p>
+<p><span class="math display">\[\begin{align}
+\mathcal{D}\left(A \right) &amp; = \sum_{i_1} \sum_{i_2 \neq i_1} \cdots \sum_{i_n \neq i_1 \land i_n \neq i_2 \land \cdots} a_{1i_1} a_{2i_2} \cdots a_{ni_n} \mathcal{D}\left(e_{i_1}, \ldots, e_{i_n} \right) \\ 
+&amp; = \sum_{\sigma\in S_n} \mathcal{D}\left(e_{\sigma(1)}, \ldots, e_{\sigma(n)} \right) \prod_{i=1}^n a_{i \sigma(i)}
+\end{align}\]</span></p>
+<p>下面就需要确定 <span class="math inline">\(\mathcal{D}\left(e_{\sigma(1)}, \ldots, e_{\sigma(n)} \right)\)</span> 的符号，通过交换变成 <span class="math inline">\(\mathcal{D}\left(e_1, \ldots, e_n \right)\)</span> 。设 <span class="math inline">\(h = \sigma^{-1}\)</span> 。</p>
+<ul>
+<li><span class="math inline">\(e_1\)</span> 所在的位置是 <span class="math inline">\(h(1)\)</span>，需要移动到 <span class="math inline">\(1\)</span> ，通过交换 <span class="math inline">\(k_1\)</span> 次；</li>
+<li><span class="math inline">\(e_2\)</span> 移动到 <span class="math inline">\(2\)</span> 需要交换 <span class="math inline">\(k_2\)</span> 次；</li>
+</ul>
+<p>不难发现，<span class="math inline">\(k_1\)</span> 等于比 <span class="math inline">\(1\)</span> 大但是在它前面的数字个数，也就是逆序对数，<span class="math inline">\(k_2\)</span> 等于比 <span class="math inline">\(2\)</span> 大但是在其前面的数字个数，也是逆序对数，所以 <span class="math inline">\(k_1+k_2+\cdots + k_n = k\)</span> 等于总的逆序对数目，如果 <span class="math inline">\(k \equiv 0 (\text{mod } 2)\)</span>，则称这个排列 <span class="math inline">\(\sigma\)</span> 是<mark class="label ">偶排列</mark>，否则为<mark class="label ">奇排列</mark>。</p>
+<p><span class="math display">\[\mathcal{D}\left(A \right) = \sum_{\sigma \in S_n} \varepsilon_\sigma \prod_{i=1}^n a_{i \sigma(i)}\]</span></p>
+<p>通过最终的定义式，容易看出，总共有 <span class="math inline">\(n!\)</span> 项求和，因为 <span class="math inline">\(S_n\)</span> 全排列的数目是 <span class="math inline">\(n!\)</span> ，每项由 <span class="math inline">\(n\)</span> 项因子组成，这 <span class="math inline">\(n\)</span> 项因子来自矩阵 <span class="math inline">\(A\)</span> 的不同行不同列，不难看出行和列的地位是相等的。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/determinant/" rel="tag"><i class="fa fa-tag"></i> determinant</a>
+              <a href="/tags/matrix/" rel="tag"><i class="fa fa-tag"></i> matrix</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/06/16/Using-Github-Branch-to-Back-up-Hexo-Blog/" rel="prev" title="Using Github Branch to Back up Hexo Blog">
+                  <i class="fa fa-chevron-left"></i> Using Github Branch to Back up Hexo Blog
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhuyk6</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@9.1.1/dist/mermaid.min.js","integrity":"sha256-8L3O8tirFUa8Va4NSTAyIbHJeLd6OnlcxgupV9F77e0="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.1/es5/tex-mml-chtml.js","integrity":"sha256-hlC2uSQYTmPsrzGZTEQEg9PZ1a/+SV6VBCTclohf2og="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

@@ -29,8 +29,9 @@
 <meta property="og:description" content="本文介绍如何使用git branch实现在github上备份hexo blog。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-06-16T00:23:32.000Z">
-<meta property="article:modified_time" content="2022-06-16T00:36:41.639Z">
+<meta property="article:modified_time" content="2022-06-16T01:36:09.480Z">
 <meta property="article:author" content="zhuyk6">
+<meta property="article:tag" content="blog">
 <meta name="twitter:card" content="summary">
 
 
@@ -129,18 +130,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-count">41</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -217,7 +218,16 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2022-06-16 08:23:32 / 修改时间：08:36:41" itemprop="dateCreated datePublished" datetime="2022-06-16T08:23:32+08:00">2022-06-16</time>
+      <time title="创建时间：2022-06-16 08:23:32 / 修改时间：09:36:09" itemprop="dateCreated datePublished" datetime="2022-06-16T08:23:32+08:00">2022-06-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Tools/" itemprop="url" rel="index"><span itemprop="name">Tools</span></a>
+        </span>
     </span>
 
   
@@ -245,7 +255,8 @@
 <li><code>package.json</code> ：npm依赖的包</li>
 </ul>
 <h1 id="git-ignore">git ignore</h1>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># .gitignore</span><br><span class="line"></span><br><span class="line">.DS_Store</span><br><span class="line">Thumbs.db</span><br><span class="line">db.json</span><br><span class="line">*.log</span><br><span class="line">node_modules/</span><br><span class="line">public/</span><br><span class="line">.deploy*/</span><br><span class="line">package-lock.json</span><br></pre></td></tr></table></figure>
+<p><code>.gitignore</code> 文件如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.DS_Store</span><br><span class="line">Thumbs.db</span><br><span class="line">db.json</span><br><span class="line">*.log</span><br><span class="line">node_modules/</span><br><span class="line">public/</span><br><span class="line">.deploy*/</span><br><span class="line">package-lock.json</span><br></pre></td></tr></table></figure>
 <h1 id="git-branch">git branch</h1>
 <p>在github上新建一个git branch，比如<code>source</code>，将其设置为默认分支。</p>
 <p>git clone 下来该项目，将上述 Hexo 需要的文件放在 <code>source</code> 分支下，提交即可。</p>
@@ -260,6 +271,9 @@
     
 
     <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/blog/" rel="tag"><i class="fa fa-tag"></i> blog</a>
+          </div>
 
         
 
@@ -270,6 +284,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2022/06/17/Definition-of-Determinant/" rel="next" title="Definition of Determinant">
+                  Definition of Determinant <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
